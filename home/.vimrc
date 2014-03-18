@@ -190,3 +190,6 @@ let g:airline#extensions#whitespace#symbol = 'Ξ'
 " Always show the airline bar
 set laststatus=2
 
+" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+set pastetoggle=<F2> 
+
