@@ -217,3 +217,4 @@ shopt -s histappend                      # append to history, don't overwrite it
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
+export PATH="$HOME/local/bin:$PATH"
