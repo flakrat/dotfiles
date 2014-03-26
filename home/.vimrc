@@ -6,63 +6,101 @@ if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-set nocompatible
-"filetype off
+" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
+set pastetoggle=<F12> 
 
+""" Vundle Stuff - https://github.com/gmarik/Vundle.vim
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
-
 call vundle#rc()
+" alternatively, pass a path where Vundle should install plugins
+"let path = '~/some/path/here'
+"call vundle#rc(path)
 
-" let Vundle manage Vundle
-" " required!
-Bundle 'gmarik/vundle'
+" To install plugins, add them here and then:
+" Launch vim and run :PluginInstall
+"
+" To install from command line: vim +PluginInstall +qall
+"
+" let Vundle manage Vundle, required
+Plugin 'gmarik/vundle'
 
-" file browser
-Bundle 'scrooloose/nerdtree'
+" VIM Puppet plugin - https://github.com/rodjek/vim-puppet
+Plugin 'rodjek/vim-puppet'
 
-" text alignment
-Bundle 'godlygeek/tabular'
+" Tabular - https://github.com/godlygeek/tabular
+" Sometimes, it's useful to line up text. Naturally, it's nicer to have the
+" computer do this for you, since aligning things by hand quickly becomes
+" unpleasant.
+Plugin 'godlygeek/tabular'
 
-" fuzzy file,buffer,mru,tag,... finder
-Bundle 'kien/ctrlp.vim'
+" syntastic - https://github.com/scrooloose/syntastic
+" Syntastic is a syntax checking plugin for Vim that runs files through
+" external syntax checkers and displays any resulting errors to the user. This
+" can be done on demand, or automatically as files are saved.
+Plugin 'scrooloose/syntastic'
 
-" keyword completion cache
-Bundle 'Shougo/neocomplcache.vim'
-
-" text surrounds
-Bundle 'tpope/vim-surround'
-
-Bundle 'joshbeard/timestamp.vim'
-
-Bundle 'majutsushi/tagbar'
-
-" window zooming
-Bundle 'vim-scripts/ZoomWin'
-
-" puppet niceties
-Bundle 'rodjek/vim-puppet'
-
-" status/tabline for vim
-Bundle 'bling/vim-airline'
-
-" syntax checking plugin
-Bundle 'scrooloose/syntastic'
-
-" Git wrapper
-Bundle 'tpope/vim-fugitive'
-map <Leader>a :Git add %<CR>
-map <Leader>s :Gstatus<CR>
-map <Leader>c :Gcommit<CR>
-
-" wisely add end in ruby, endfunction/endif/more in vim script, etc
-Bundle 'tpope/vim-endwise'
+" File browser - https://github.com/scrooloose/nerdtree
+Plugin 'scrooloose/nerdtree'
 
 " sexy color theme
-Bundle 'joshbeard/vim-kolor'
+Plugin 'joshbeard/vim-kolor'
 " a light colorscheme
-Bundle 'Pychimp/vim-sol'
+Plugin 'Pychimp/vim-sol'
 " light/pleasant colorscheme
-Bundle 'jnurmine/Zenburn'
+Plugin 'jnurmine/Zenburn'
+
+""" End Plugins
+
+filetype plugin indent on     " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Plugin commands are not allowed.
+" Put your stuff after this line
+
+""" Syntastic options - http://crimsonfu.github.io/2012/08/22/vimpuppet.html
+" read :help Syntastic for details
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_enable_signs=1
+let g:syntastic_quiet_messages = {'level': 'warnings'}
+let g:syntastic_auto_loc_list=1
+
+""" Josh Beard Stuff 
+
+"""MJH"""" fuzzy file,buffer,mru,tag,... finder
+"""MJH"""Bundle 'kien/ctrlp.vim'
+
+"""MJH"""" keyword completion cache
+"""MJH"""Bundle 'Shougo/neocomplcache.vim'
+
+"""MJH"""" text surrounds
+"""MJH"""Bundle 'tpope/vim-surround'
+
+"""MJH"""Bundle 'joshbeard/timestamp.vim'
+
+"""MJH"""Bundle 'majutsushi/tagbar'
+
+"""MJH"""" window zooming
+"""MJH"""Bundle 'vim-scripts/ZoomWin'
+
+"""MJH"""" status/tabline for vim
+"""MJH"""Bundle 'bling/vim-airline'
+
+" wisely add end in ruby, endfunction/endif/more in vim script, etc
+Plugin 'tpope/vim-endwise'
 
 " turn off auto adding comments on next line
 " so you can cut and paste reliably
@@ -79,9 +117,9 @@ syntax on
 " which is not very legible on a black background
 highlight comment ctermfg=cyan
 
-let g:neocomplcache_enable_at_startup = 1
-
-map <Leader>= <C-w>=
+"""MJH"""let g:neocomplcache_enable_at_startup = 1
+"""MJH"""
+"""MJH"""map <Leader>= <C-w>=
 
 set tabstop=2
 set expandtab
@@ -92,22 +130,26 @@ set shiftwidth=2
 set smartindent
 set t_Co=256
 
-set formatoptions-=cro
+"""MJH"""set formatoptions-=cro
+"""MJH"""
+"""MJH"""autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+"""MJH"""
+"""MJH"""" 80 column concern
+"""MJH""""let &colorcolumn=join(range(81,999),",")
 
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" This adds a nice vertical colored bar at column 80, but has the nasty side
+" effect of adding extra white space when copying and pasting in vim using the 
+" mouse (padded up to column 80
+"if version >= 703
+"  set colorcolumn=80
+"endif
 
-" 80 column concern
-"let &colorcolumn=join(range(81,999),",")
-if version >= 703
-  set colorcolumn=80
-endif
+"""MJH"""" nerdtree
+"""MJH"""map <leader>n :NERDTreeToggle<CR>
+"""MJH"""map <C-n> :NERDTreeToggle<CR>
+"""MJH"""" " autocmd vimenter * if !argc() | NERDTree | endif
 
-" nerdtree
-map <leader>n :NERDTreeToggle<CR>
-map <C-n> :NERDTreeToggle<CR>
-" " autocmd vimenter * if !argc() | NERDTree | endif
-"
-" " colorscheme
+" colorscheme
 color kolor
 syn on
 
@@ -125,8 +167,8 @@ au BufRead,BufNewFile *.pp
 au BufRead,BufNewFile *_spec.rb
   \ nmap <F8> :!rspec --color %<CR>
 
-" Enable indentation matching for =>'s
-filetype plugin indent on
+"""MJH"""" Enable indentation matching for =>'s
+"filetype plugin indent on
 
 " switch panes easier
 nnoremap <C-J> <C-W><C-J>
@@ -137,59 +179,62 @@ nnoremap <C-H> <C-W><C-H>
 set splitbelow
 set splitright
 
-" neocomplcache keybindings
-let g:neocomplcache_enable_at_startup = 1
+"""MJH"""" neocomplcache keybindings
+"""MJH"""let g:neocomplcache_enable_at_startup = 1
 
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
+"""MJH"""inoremap <expr><C-g>     neocomplcache#undo_completion()
+"""MJH"""inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplcache#smart_close_popup() . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+"""MJH"""" <CR>: close popup and save indent.
+"""MJH"""inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"""MJH"""function! s:my_cr_function()
+"""MJH"""  return neocomplcache#smart_close_popup() . "\<CR>"
+"""MJH"""  " For no inserting <CR> key.
+"""MJH"""  "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+"""MJH"""endfunction
+"""MJH"""" <TAB>: completion.
+"""MJH"""inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"""MJH"""" <C-h>, <BS>: close popup and delete backword char.
+"""MJH"""inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+"""MJH"""inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+"""MJH"""inoremap <expr><C-y>  neocomplcache#close_popup()
+"""MJH"""inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 
-""""""""""""""""""""""""""""""
-" airline
-""""""""""""""""""""""""""""""
-let g:airline_theme             = 'powerlineish'
-let g:airline_enable_branch     = 1
-let g:airline_enable_syntastic  = 1
-let g:airline_powerline_fonts   = 1
-"
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-let g:airline#extensions#tabline#enabled = 1
+"""MJH"""""""""""""""""""""""""""""""""
+"""MJH"""" airline
+"""MJH"""""""""""""""""""""""""""""""""
+"""MJH"""let g:airline_theme             = 'powerlineish'
+"""MJH"""let g:airline_enable_branch     = 1
+"""MJH"""let g:airline_enable_syntastic  = 1
+"""MJH"""let g:airline_powerline_fonts   = 1
 
-" unicode symbols
-let g:airline_left_sep = '»'
-"let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-"let g:airline_right_sep = '◀'
-let g:airline_linecolumn_prefix = '␊ '
-let g:airline_linecolumn_prefix = '␤ '
-let g:airline_linecolumn_prefix = '¶ '
-let g:airline#extensions#branch#symbol = '⎇ '
-let g:airline_paste_symbol = 'ρ'
-let g:airline_paste_symbol = 'Þ'
-let g:airline_paste_symbol = '∥'
-let g:airline#extensions#whitespace#symbol = 'Ξ'
+"""MJH"""if !exists('g:airline_symbols')
+"""MJH"""  let g:airline_symbols = {}
+"""MJH"""endif
+"""MJH"""let g:airline_symbols.space = "\ua0"
+"""MJH"""let g:airline#extensions#tabline#enabled = 1
 
-" Always show the airline bar
-set laststatus=2
+"""MJH"""" unicode symbols
+"""MJH"""let g:airline_left_sep = '»'
+"""MJH""""let g:airline_left_sep = '▶'
+"""MJH"""let g:airline_right_sep = '«'
+"""MJH""""let g:airline_right_sep = '◀'
+"""MJH"""let g:airline_linecolumn_prefix = '␊ '
+"""MJH"""let g:airline_linecolumn_prefix = '␤ '
+"""MJH"""let g:airline_linecolumn_prefix = '¶ '
+"""MJH"""let g:airline#extensions#branch#symbol = '⎇ '
+"""MJH"""let g:airline_paste_symbol = 'ρ'
+"""MJH"""let g:airline_paste_symbol = 'Þ'
+"""MJH"""let g:airline_paste_symbol = '∥'
+"""MJH"""let g:airline#extensions#whitespace#symbol = 'Ξ'
 
-" http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
-set pastetoggle=<F2> 
+"""MJH"""" Always show the airline bar
+"""MJH"""set laststatus=2
+
+" Git wrapper
+Plugin 'tpope/vim-fugitive'
+map <Leader>a :Git add %<CR>
+map <Leader>s :Gstatus<CR>
+map <Leader>c :Gcommit<CR>
 
