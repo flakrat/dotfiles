@@ -107,6 +107,7 @@ fi
 
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export PATH="/share/apps/atlab/sbin:${PATH}"
+  export EDITOR="/home/mhanby/local/bin/vim"
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
   function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$; }
