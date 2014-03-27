@@ -105,26 +105,28 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then
+if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export PATH="/share/apps/atlab/sbin:${PATH}"
-# Begin CHEAHA config
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
+  function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$; }
+  function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_min_disabled() { downhosts | egrep d$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_min_unreach()  { downhosts | egrep u$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
+  function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -s r -q $host; done }
+  function downhosts_disable()      { for host in $(downhosts_queue); do qmod -d $host; done }
+  function downhosts_qmod()         { for host in $(downhosts_min) ; do sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo $(hostname -s) : Lustre not mounted; mount -a ; else echo qmod -e sipsey.q@$(hostname -s); ls -d /scratch/user/mhanby > /dev/null; fi'; done }
+  function downhosts_reset()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh $host; sleep 0; done }
   alias qstatall="qstat -u \*"
   alias hostmem="qhost | grep compute | grep -v verari | sort | awk '{print \$1 \"\t\t\" \$6}' | sort -n -r -k2"
   alias updatefirmware="for host in \$(qstat -f -s r | grep -v scalemp | grep -v verari | grep d\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'); do read -p \"Update \$host firmware: (y/n)\"; if [ \$REPLY = 'y' ]; then echo sudo ssh \$host \"/share/apps/atlab/bin/update-node-firmware.sh bootstrap\"; else echo 'Skipping firmware update'; fi; done"
-  alias downhosts='qstat -f | grep -v cheaha-compute-1-3 | grep -v scalemp | egrep [du]$'
-  alias downhosts_min="qstat -f | grep -v cheaha-compute-1-3 | grep -v scalemp | egrep [du]\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'"
-  alias downhosts_unreachmin="qstat -f | grep u\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'"
-  alias downhosts_dismin="qstat -f | grep d\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'"
-  alias downhosts_queue='qstat -f | grep -v cheaha-compute-1-3 | grep -v scalemp | egrep [du]$ | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"'
   alias qstatgen2="qstat -f -u \* -s r -q all.q"
   alias qstatgen3="qstat -f -u \* -s r -q sipsey.q"
   alias queryusers="for user in \$(grep -v ^# /etc/auto.home | grep -v ^\* | awk '{print \$1}'| sort); do if [ ! \"\$(w | grep \$user | awk '{print \$1}' | uniq)\" ]; then if [ ! \"\$(qstat -u \$user -s r | grep \$user)\" ]; then        echo \$user; sudo time rsync -a --delete /export/home.old/\$user/ /export/home/\$user/ ; sudo mv /export/home.old/\$user /export/home.old/archived/; fi; fi; done"
 #  module load lammpi/lam-7.1-gnu
   export PATH=/share/apps/atlab/bin:${PATH}
-# End CHEAHA config
-fi
+fi # End CHEAHA config
 
 # User specific aliases and functions
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
@@ -133,10 +135,6 @@ alias virsh-sys="virsh --connect qemu:///system"
 alias proclist='ps auxf | grep -v "0.[0-9]  0"'
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
-function downhosts_qstat() { for host in $(downhosts_queue|egrep -v 'cheaha-compute-1-[3,5]|verari-compute-0-9'); do qstat -u \* -s r -q $host; done }
-function downhosts_disable() { for host in $(downhosts_queue|egrep -v 'cheaha-compute-1-[3,5]|verari-compute-0-9'); do qmod -d $host; done }
-function downhosts_qmod() { for host in `qstat -f | grep -v cheaha-compute-1-3 | grep -v scalemp | egrep [du]$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'` ; do sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo $(hostname -s) : Lustre not mounted; mount -a ; else echo qmod -e sipsey.q@$(hostname -s); ls -d /scratch/user/mhanby > /dev/null; fi'; done }
-#function downhosts_min() { qstat -f | grep -v cheaha-compute-1-3 | grep -v scalemp | egrep [du]\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}' }
 #function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
 
 # nixCraft (on Facebook) calc recipe
