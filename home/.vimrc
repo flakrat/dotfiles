@@ -7,7 +7,7 @@ if has("autocmd")
 endif
 
 " http://vim.wikia.com/wiki/Toggle_auto-indenting_for_code_paste
-set pastetoggle=<F12> 
+set pastetoggle=<F10> 
 
 """ Vundle Stuff - https://github.com/gmarik/Vundle.vim
 set nocompatible              " be iMproved, required
