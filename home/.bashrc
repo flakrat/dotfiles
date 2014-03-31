@@ -105,6 +105,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -le 6 ]]; then
+  export EDITOR="/home/mhanby/local/bin/vim"
+fi
+
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export PATH="/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
