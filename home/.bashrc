@@ -110,7 +110,7 @@ if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -le 6 ]]
 fi
 
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
-  export PATH="/share/apps/atlab/sbin:${PATH}"
+  export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
