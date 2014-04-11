@@ -156,7 +156,7 @@ export RUBYLIB=$HOME/.ruby/lib/ruby:$HOME/.ruby/lib/site_ruby/${RUBYVER}:${RUBYL
 
 # Colorful prompt
 if [ "$TERM" == "xterm-256color" ] || [ "$TERM" == "xterm" ] || [ "$TERM" == "screen" ] ; then
-  export PS1="\[\033[32m\]\w\n\[\033[1;31m\]\u@\h \[\033[0m\]: \[\033[35m\]\d \t \[\033[0m\]: \[\e[1;34m\]\W\[\033[0m\] $ \[\033[0m\]"
+  export PS1="\[\033[32m\]\w\n\[\033[1;31m\]\u@\h \[\033[0m\]: \[\033[33m\]\d \t \[\033[0m\]: \[\e[1;34m\]\W\[\033[0m\] $ \[\033[0m\]"
 else
   export PS1='[\u@\h \W]\$ '
 fi
