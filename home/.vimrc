@@ -52,6 +52,8 @@ Plugin 'joshbeard/vim-kolor'
 Plugin 'Pychimp/vim-sol'
 " light/pleasant colorscheme
 Plugin 'jnurmine/Zenburn'
+" https://github.com/morhetz/gruvbox/wiki/Installation
+Plugin 'morhetz/gruvbox'
 
 """ End Plugins
 
@@ -238,3 +240,6 @@ map <Leader>a :Git add %<CR>
 map <Leader>s :Gstatus<CR>
 map <Leader>c :Gcommit<CR>
 
+"color codeschool
+color gruvbox
+set background=dark
