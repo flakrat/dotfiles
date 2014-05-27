@@ -110,6 +110,7 @@ if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -le 6 ]]
 fi
 
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
+  #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
@@ -121,6 +122,11 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -s r -q $host; done }
   function downhosts_disable()      { for host in $(downhosts_queue); do qmod -d $host; done }
+  function downhosts_enable()       { 
+    for host in `downhosts_min | grep -v cheaha-compute-0-3 | grep -v cloud` ; do 
+      sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo "$(hostname -s) : Lustre not mounted"; mount -a ; else echo "qmod -e `qstat -f | grep $(hostname -s) | head -n 1 | perl -pe "s/@.*//"`@$(hostname -s)"; ls -d /scratch/user/mhanby > /dev/null; fi';
+    done
+  }
   function downhosts_qmod()         { for host in $(downhosts_min) ; do sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo $(hostname -s) : Lustre not mounted; mount -a ; else echo qmod -e sipsey.q@$(hostname -s); ls -d /scratch/user/mhanby > /dev/null; fi'; done }
   function downhosts_reset()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh $host; sleep 0; done }
   alias qstatall="qstat -u \*"
