@@ -107,6 +107,8 @@ fi
 
 if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -le 6 ]]; then
   export EDITOR="/home/mhanby/local/bin/vim"
+else
+  export EDITOR="/usr/bin/vim"
 fi
 
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
