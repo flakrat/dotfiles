@@ -141,13 +141,16 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export PATH=/share/apps/atlab/bin:${PATH}
 fi # End CHEAHA config
 
-# User specific aliases and functions
+# Host agnostic alias and functions
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
 alias proclist='ps auxf | grep -v "0.[0-9]  0"'
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
+# Sort processes by top virtmem usage
+function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
+
 #function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
 
 # nixCraft (on Facebook) calc recipe
