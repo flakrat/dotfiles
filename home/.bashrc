@@ -117,20 +117,32 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export EDITOR="/home/mhanby/local/bin/vim"
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
+  # downhosts displays compute nodes with SGE status a,u,d
   function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$; }
   function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_disabled() { downhosts | egrep d$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_unreach()  { downhosts | egrep u$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
+  # This function displays jobs assigned to compute nodes returned by downhosts()
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -s r -q $host; done }
+  # Disables hosts marked as unreachable by SGE
   function downhosts_disable()      { for host in $(downhosts_queue); do qmod -d $host; done }
+  # This function ssh's to each downhost, checks a known good Lustre path, if the path fails it attempts to mount Lustre
+  # if it succeeds, it displays the qmod -e command needed to enable the compute node in SGE
   function downhosts_enable()       { 
     for host in `downhosts_min | grep -v cheaha-compute-0-3 | grep -v cloud` ; do 
       sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo "$(hostname -s) : Lustre not mounted"; mount -a ; else echo "qmod -e `qstat -f | grep $(hostname -s) | head -n 1 | perl -pe "s/@.*//"`@$(hostname -s)"; ls -d /scratch/user/mhanby > /dev/null; fi';
     done
   }
-  function downhosts_qmod()         { for host in $(downhosts_min) ; do sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo $(hostname -s) : Lustre not mounted; mount -a ; else echo qmod -e sipsey.q@$(hostname -s); ls -d /scratch/user/mhanby > /dev/null; fi'; done }
+  # I used to use downhosts_qmod as the function name, copying function downhosts_enable to support my brain backward compatibility
+  downhosts_qmod=$(declare -f downhosts_enable)                                                                                               
+  downhosts_qmod=${downhosts_qmod#*\{}
+  downhosts_qmod=${downhosts_qmod%\}}
+  eval "downhosts_qmod () { $downhosts_qmod }"
+  # Function to reset hosts that are unreachable via ssh. reset-down-hosts.sh uses ipmi - https://gitlab.uabgrid.uab.edu/mhanby/atlab/blob/master/scripts/reset-down-hosts.sh
   function downhosts_reset()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh $host; sleep 0; done }
+
+  # Cheaha aliases
   alias qstatall="qstat -u \*"
   alias hostmem="qhost | grep compute | grep -v verari | sort | awk '{print \$1 \"\t\t\" \$6}' | sort -n -r -k2"
   alias updatefirmware="for host in \$(qstat -f -s r | grep -v scalemp | grep -v verari | grep d\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'); do read -p \"Update \$host firmware: (y/n)\"; if [ \$REPLY = 'y' ]; then echo sudo ssh \$host \"/share/apps/atlab/bin/update-node-firmware.sh bootstrap\"; else echo 'Skipping firmware update'; fi; done"
