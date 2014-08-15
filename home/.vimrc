@@ -14,11 +14,10 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
-"let path = '~/some/path/here'
-"call vundle#rc(path)
+"call vundle#begin('~/some/path/here')
 
 " To install plugins, add them here and then:
 " Launch vim and run :PluginInstall
@@ -26,7 +25,7 @@ call vundle#rc()
 " To install from command line: vim +PluginInstall +qall
 "
 " let Vundle manage Vundle, required
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 " VIM Puppet plugin - https://github.com/rodjek/vim-puppet
 Plugin 'rodjek/vim-puppet'
@@ -55,20 +54,20 @@ Plugin 'jnurmine/Zenburn'
 " https://github.com/morhetz/gruvbox/wiki/Installation
 Plugin 'morhetz/gruvbox'
 
-""" End Plugins
-
+" All of your Plugins must be added before the following line
+call vundle#end()             " required
 filetype plugin indent on     " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
 " Brief help
-" :PluginList          - list configured plugins
-" :PluginInstall(!)    - install (update) plugins
-" :PluginSearch(!) foo - search (or refresh cache first) for foo
-" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
 " see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Plugin commands are not allowed.
+" Put your non-Plugin stuff after this line
 " Put your stuff after this line
 
 """ Syntastic options - http://crimsonfu.github.io/2012/08/22/vimpuppet.html
@@ -79,27 +78,6 @@ set statusline+=%*
 let g:syntastic_enable_signs=1
 let g:syntastic_quiet_messages = {'level': 'warnings'}
 let g:syntastic_auto_loc_list=1
-
-""" Josh Beard Stuff 
-
-"""MJH"""" fuzzy file,buffer,mru,tag,... finder
-"""MJH"""Bundle 'kien/ctrlp.vim'
-
-"""MJH"""" keyword completion cache
-"""MJH"""Bundle 'Shougo/neocomplcache.vim'
-
-"""MJH"""" text surrounds
-"""MJH"""Bundle 'tpope/vim-surround'
-
-"""MJH"""Bundle 'joshbeard/timestamp.vim'
-
-"""MJH"""Bundle 'majutsushi/tagbar'
-
-"""MJH"""" window zooming
-"""MJH"""Bundle 'vim-scripts/ZoomWin'
-
-"""MJH"""" status/tabline for vim
-"""MJH"""Bundle 'bling/vim-airline'
 
 " wisely add end in ruby, endfunction/endif/more in vim script, etc
 Plugin 'tpope/vim-endwise'
