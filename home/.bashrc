@@ -105,7 +105,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -le 6 ]]; then
+if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -lt 6 ]]; then
   export EDITOR="/home/mhanby/local/bin/vim"
 else
   export EDITOR="/usr/bin/vim"
