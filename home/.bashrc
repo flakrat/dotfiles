@@ -128,7 +128,7 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   function downhosts_job_details()  { 
     for job in $(downhosts_qstat | grep ^[0-9] | awk '{print $1}'); do
       echo -----------------------------------------------------;
-      qstat -j $job | egrep ^"job_number|job_name|owner|usage|hard_res";
+      qstat -j $job | egrep ^"job_number|job_name|owner|usage|hard resource_list|parallel";
     done
     echo -----------------------------------------------------;
   }
