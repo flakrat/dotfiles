@@ -125,6 +125,14 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
   # This function displays jobs assigned to compute nodes returned by downhosts()
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -s r -q $host; done }
+  function downhosts_job_details()  { 
+    for job in $(downhosts_qstat | grep ^[0-9] | awk '{print $1}'); do
+      echo -----------------------------------------------------;
+      qstat -j $job | egrep ^"job_number|job_name|owner|usage|hard_res";
+    done
+    echo -----------------------------------------------------;
+  }
+
   # Disables hosts marked as unreachable by SGE
   function downhosts_disable()      { for host in $(downhosts_queue); do qmod -d $host; done }
   # This function ssh's to each downhost, checks a known good Lustre path, if the path fails it attempts to mount Lustre
