@@ -118,7 +118,7 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
   # downhosts displays compute nodes with SGE status a,u,d
-  function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$; }
+  function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$ | sed s/interactive-comp/interactive-compute-0-1/ ; }
   function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_disabled() { downhosts | egrep d$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_unreach()  { downhosts | egrep u$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
