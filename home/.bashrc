@@ -148,7 +148,10 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   downhosts_qmod=${downhosts_qmod%\}}
   eval "downhosts_qmod () { $downhosts_qmod }"
   # Function to reset hosts that are unreachable via ssh. reset-down-hosts.sh uses ipmi - https://gitlab.uabgrid.uab.edu/mhanby/atlab/blob/master/scripts/reset-down-hosts.sh
-  function downhosts_reset()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh $host; sleep 0; done }
+  function downhosts_off()       { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c off; sleep 0; done }
+  function downhosts_on()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c on; sleep 0; done }
+  function downhosts_status()    { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c status; sleep 0; done }
+  function downhosts_reset()     { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c reset; sleep 0; done }
 
   # Cheaha aliases
   alias qstatall="qstat -u \*"
