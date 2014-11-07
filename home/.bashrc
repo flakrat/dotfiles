@@ -105,10 +105,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
-if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -lt 6 ]]; then
-  export EDITOR="/home/mhanby/local/bin/vim"
-else
-  export EDITOR="/usr/bin/vim"
+if [ -f "/usr/bin/lsb_release" ]; then
+#  if [[ "$(facter osfamily)" == "RedHat" && "$(facter lsbmajdistrelease)" -lt 6 ]]; then
+  if [ "$(lsb_release -r | awk '{print $2}' | awk -F. '{print $1}')" -lt 6 ]; then
+    export EDITOR="/home/mhanby/local/bin/vim"
+  else
+    export EDITOR="/usr/bin/vim"
+  fi
 fi
 
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
@@ -117,6 +120,14 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   export EDITOR="/home/mhanby/local/bin/vim"
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
+  # Print the job script (including path) for a specified job
+  function jobscript() {
+    if [[ $# -eq 0 ]] ; then
+      echo 'Must provide an JobID'
+      exit 0
+    fi
+    qstat -j $1 | egrep ^'sge_o_workdir|script_file' | sort -r | tr '\n' ' ' | awk '{print $2 "/" $4}'
+  }
   # downhosts displays compute nodes with SGE status a,u,d
   function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$ | sed s/interactive-comp/interactive-compute-0-1/ ; }
   function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
@@ -168,7 +179,7 @@ fi # End CHEAHA config
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
-alias proclist='ps auxf | grep -v "0.[0-9]  0"'
+alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage
