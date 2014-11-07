@@ -121,6 +121,8 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
   # Print the job script (including path) for a specified job
+  # If you want to cat the file in a single command use -E to sudo:
+  # sudo -E cat $(jobscript 12345)
   function jobscript() {
     if [[ $# -eq 0 ]] ; then
       echo 'Must provide an JobID'
