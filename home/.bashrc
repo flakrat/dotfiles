@@ -138,10 +138,10 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
   # This function displays jobs assigned to compute nodes returned by downhosts()
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -f -s r -q $host; done }
-  function downhosts_job_details()  { 
-    for job in $(downhosts_qstat | grep ^[0-9] | awk '{print $1}'); do
+  function downhosts_job_details()  {
+    for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do
       echo -----------------------------------------------------;
-      qstat -j $job | egrep ^"job_number|job_name|owner|usage|hard resource_list|parallel";
+      qstat -j $job | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
     done
     echo -----------------------------------------------------;
   }
