@@ -118,8 +118,9 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
-  #export MODULEPATH=$HOME/.modulefiles:$MODULEPATH
   . /etc/profile.d/modules.sh
+  export MODULEPATH=/share/apps/tools/easybuild/modules/all:$MODULEPATH
+  export EASYBUILD_INSTALLPATH=/share/apps/tools/easybuild
   # Print the job script (including path) for a specified job
   # If you want to cat the file in a single command use -E to sudo:
   # sudo -E cat $(jobscript 12345)
@@ -130,15 +131,30 @@ if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
     fi
     qstat -j $1 | egrep ^'sge_o_workdir|script_file' | sort -r | tr '\n' ' ' | awk '{print $2 "/" $4}'
   }
+  # qstat a users job(s) to get useful details
+    function user_job_details()  {
+    for job in $(qstat -u $1 | grep ^" [0-9]" | awk '{print $1}'); do
+      echo -----------------------------------------------------;
+      qstat -j $job | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
+    done
+    echo -----------------------------------------------------;
+  }
+  # qstat a specific jobid for useful details
+  function job_details()  {
+    echo -----------------------------------------------------;
+    qstat -j $1 | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
+    echo -----------------------------------------------------;
+  }
   # downhosts displays compute nodes with SGE status a,u,d
-  function downhosts()              { qstat -f | grep -v cheaha-compute-[0,1]-3 | grep -v verari | grep -v scalemp | egrep [du]$ | sed s/interactive-comp/interactive-compute-0-1/ ; }
+  function downhosts()              { qstat -f | grep -v concurjob | grep -v cheaha-compute-[0,1]-3 | grep -v cheaha-compute-0-4 | grep -v verari | grep -v scalemp | egrep [du]$ | sed s/interactive-comp/interactive-compute-0-1/ ; }
   function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_disabled() { downhosts | egrep d$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_min_unreach()  { downhosts | egrep u$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
   # This function displays jobs assigned to compute nodes returned by downhosts()
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -f -s r -q $host; done }
-  function downhosts_job_details()  {
+#  for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do echo $job; qstat -j $job | egrep "^parallel|virtual_free|maxvmem"; done
+  function downhosts_job_details()  { 
     for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do
       echo -----------------------------------------------------;
       qstat -j $job | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
