@@ -114,7 +114,22 @@ if [ -f "/usr/bin/lsb_release" ]; then
   fi
 fi
 
-if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin CHEAHA config
+# BrightCM Master Node
+if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
+  # Uncomment the following line if you don't like systemctl's auto-paging feature:
+  # export SYSTEMD_PAGER=
+  module load cmsh
+  module load gcc
+  module load slurm
+
+  export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
+elif [[ "$(hostname -s)" =~ "shealy" ]]; then # BrightCM Compute Nodes
+  module load gcc
+  module load slurm
+elif [[ "$(hostname -s)" =~ "login" ]]; then # BrightCM Login Nodes
+  module load gcc
+  module load slurm
+elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
