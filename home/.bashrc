@@ -81,6 +81,16 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+# Rados Block Device
+alias rbd='/usr/bin/rbd rbd --id nova --keyring ~/ceph.client.nova.keyring '
+
+# Hightlight pattern in command output (unlike grep that only returns the matches)
+# http://unix.stackexchange.com/questions/366/convince-grep-to-output-all-lines-not-just-those-with-matches
+# Ex: /usr/bin/rbd --help | highlight showmapped
+highlight () {
+  perl -pe "s/$1/\e[1;31;43m$&\e[0m/g"
+}
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -114,21 +124,21 @@ if [ -f "/usr/bin/lsb_release" ]; then
   fi
 fi
 
+# Systemd
+alias systemctl_list="systemctl list-unit-files --type=service"
+
 # BrightCM Master Node
 if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   # Uncomment the following line if you don't like systemctl's auto-paging feature:
   # export SYSTEMD_PAGER=
   module load cmsh
-  module load gcc
   module load slurm
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy" ]]; then # BrightCM Compute Nodes
-  module load gcc
   module load slurm
 elif [[ "$(hostname -s)" =~ "login" ]]; then # BrightCM Login Nodes
-  module load gcc
-  module load slurm
+  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
 elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
