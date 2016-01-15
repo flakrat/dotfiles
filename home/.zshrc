@@ -117,3 +117,122 @@ ihighlight () {
   perl -pe "s/$1/\e[1;31;43m$&\e[0m/ig"
 }
 
+# Systemd
+alias systemctl_list="systemctl list-unit-files --type=service"
+
+# BrightCM Master Node
+if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
+  # Uncomment the following line if you don't like systemctl's auto-paging feature:
+  # export SYSTEMD_PAGER=
+  module load cmsh
+  module load slurm
+
+  export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
+elif [[ "$(hostname -s)" =~ "shealy|login" ]]; then # BrightCM Compute Nodes
+  module load rc-base
+  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
+elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
+  #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+  export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
+  export EDITOR="/home/mhanby/local/bin/vim"
+  . /etc/profile.d/modules.sh
+  export MODULEPATH=/share/apps/tools/easybuild/modules/all:$MODULEPATH
+  export EASYBUILD_INSTALLPATH=/share/apps/tools/easybuild
+  # Print the job script (including path) for a specified job
+  # If you want to cat the file in a single command use -E to sudo:
+  # sudo -E cat $(jobscript 12345)
+  function jobscript() {
+    if [[ $# -eq 0 ]] ; then
+      echo 'Must provide an JobID'
+      exit 0
+    fi
+    qstat -j $1 | egrep ^'sge_o_workdir|script_file' | sort -r | tr '\n' ' ' | awk '{print $2 "/" $4}'
+  }
+  # qstat a users job(s) to get useful details
+    function user_job_details()  {
+    for job in $(qstat -u $1 | grep ^" [0-9]" | awk '{print $1}'); do
+      echo -----------------------------------------------------;
+      qstat -j $job | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
+    done
+    echo -----------------------------------------------------;
+  }
+  # qstat a specific jobid for useful details
+  function job_details()  {
+    echo -----------------------------------------------------;
+    qstat -j $1 | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
+    echo -----------------------------------------------------;
+  }
+  # downhosts displays compute nodes with SGE status a,u,d
+  function downhosts()              { qstat -f | grep -v concurjob | grep -v cheaha-compute-[0,1]-3 | grep -v cheaha-compute-0-4 | grep -v verari | grep -v scalemp | egrep [du]$ | sed s/interactive-comp/interactive-compute-0-1/ ; }
+  function downhosts_min()          { downhosts | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_min_disabled() { downhosts | egrep d$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_min_unreach()  { downhosts | egrep u$ | awk '{print $1}' | awk -F@ '{print $2}' | awk -F. '{print $1}'; }
+  function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
+  # This function displays jobs assigned to compute nodes returned by downhosts()
+  function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -f -s r -q $host; done }
+#  for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do echo $job; qstat -j $job | egrep "^parallel|virtual_free|maxvmem"; done
+  function downhosts_job_details()  {
+    for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do
+      echo -----------------------------------------------------;
+      qstat -j $job | egrep ^"cwd|script_file|job_number|job_name|owner|usage|hard resource_list|parallel";
+    done
+    echo -----------------------------------------------------;
+  }
+
+  # Disables hosts marked as unreachable by SGE
+  function downhosts_disable()      { for host in $(downhosts_queue); do qmod -d $host; done }
+  # This function ssh's to each downhost, checks a known good Lustre path, if the path fails it attempts to mount Lustre
+  # if it succeeds, it displays the qmod -e command needed to enable the compute node in SGE
+  function downhosts_enable()       {
+    for host in `downhosts_min | grep -v cheaha-compute-0-3 | grep -v cloud` ; do
+      sudo ssh $host 'if [ ! -d /scratch/user/mhanby ]; then echo "$(hostname -s) : Lustre not mounted"; mount -a ; else echo "qmod -e `qstat -f | grep $(hostname -s) | head -n 1 | perl -pe "s/@.*//"`@$(hostname -s)"; ls -d /scratch/user/mhanby > /dev/null; fi';
+    done
+  }
+  # I used to use downhosts_qmod as the function name, copying function downhosts_enable to support my brain backward compatibility
+  downhosts_qmod=$(declare -f downhosts_enable)
+  downhosts_qmod=${downhosts_qmod#*\{}
+  downhosts_qmod=${downhosts_qmod%\}}
+  eval "downhosts_qmod () { $downhosts_qmod }"
+  # Function to reset hosts that are unreachable via ssh. reset-down-hosts.sh uses ipmi - https://gitlab.uabgrid.uab.edu/mhanby/atlab/blob/master/scripts/reset-down-hosts.sh
+  function downhosts_off()       { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c off; sleep 0; done }
+  function downhosts_on()        { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c on; sleep 0; done }
+  function downhosts_status()    { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c status; sleep 0; done }
+  function downhosts_reset()     { for host in $(downhosts_min) ; do ~/bin/reset-down-hosts.sh -t $host -c reset; sleep 0; done }
+
+  # Cheaha aliases
+  alias qstatall="qstat -u \*"
+  alias hostmem="qhost | grep compute | grep -v verari | sort | awk '{print \$1 \"\t\t\" \$6}' | sort -n -r -k2"
+  alias updatefirmware="for host in \$(qstat -f -s r | grep -v scalemp | grep -v verari | grep d\$ | awk '{print \$1}' | awk -F@ '{print \$2}' | awk -F. '{print \$1}'); do read -p \"Update \$host firmware: (y/n)\"; if [ \$REPLY = 'y' ]; then echo sudo ssh \$host \"/share/apps/atlab/bin/update-node-firmware.sh bootstrap\"; else echo 'Skipping firmware update'; fi; done"
+  alias qstatgen2="qstat -f -u \* -s r -q all.q"
+  alias qstatgen3="qstat -f -u \* -s r -q sipsey.q"
+  alias queryusers="for user in \$(grep -v ^# /etc/auto.home | grep -v ^\* | awk '{print \$1}'| sort); do if [ ! \"\$(w | grep \$user | awk '{print \$1}' | uniq)\" ]; then if [ ! \"\$(qstat -u \$user -s r | grep \$user)\" ]; then        echo \$user; sudo time rsync -a --delete /export/home.old/\$user/ /export/home/\$user/ ; sudo mv /export/home.old/\$user /export/home.old/archived/; fi; fi; done"
+#  module load lammpi/lam-7.1-gnu
+  export PATH=/share/apps/atlab/bin:${PATH}
+fi # End CHEAHA config
+
+# Host agnostic alias and functions
+alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
+alias vmlist="virsh --connect qemu:///system list"
+alias virsh-sys="virsh --connect qemu:///system"
+alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
+function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
+function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
+# Sort processes by top virtmem usage
+function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
+
+#function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
+
+# nixCraft (on Facebook) calc recipe
+# Usage: calc "10+2"
+#   Pi:  calc "scale=10; 4*a(1)"
+# Temperature: calc "30 * 1.8 + 32"
+#              calc "(86 - 32)/1.8"
+calc() { echo "$*" | bc -l; }
+
+# Ruby
+export RUBYVER=`ruby --version | cut -d" " -f 2 | cut -d. -f 1,2`
+export GEM_HOME=$HOME/.ruby/lib/ruby/gems/${RUBYVER}
+export RUBYLIB=$HOME/.ruby/lib/ruby:$HOME/.ruby/lib/site_ruby/${RUBYVER}:${RUBYLIB}
+export PATH="$HOME/local/bin:${PATH}"
+export MANPATH="$HOME/local/share/man:${MANPATH}"
+
