@@ -51,8 +51,6 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(git)
 
 # User configuration
-
-export PATH="/Users/mhanby/local/bin:/Users/mhanby/.local/sbin:/Users/mhanby/.local/bin:/usr/local/sbin:/Users/mhanby/.local/sbin:/Users/mhanby/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -233,6 +231,52 @@ calc() { echo "$*" | bc -l; }
 export RUBYVER=`ruby --version | cut -d" " -f 2 | cut -d. -f 1,2`
 export GEM_HOME=$HOME/.ruby/lib/ruby/gems/${RUBYVER}
 export RUBYLIB=$HOME/.ruby/lib/ruby:$HOME/.ruby/lib/site_ruby/${RUBYVER}:${RUBYLIB}
-export PATH="$HOME/local/bin:${PATH}"
 export MANPATH="$HOME/local/share/man:${MANPATH}"
 
+# Set the gnome-terminal title. This is an attempt to fix the issue where gnome terminal doesn't always update on its own
+# This works when starting a new shell (i.e. ssh to a node), but doesn't work when exiting that node
+# The problem is essentially gnome-terminal isn't refreshing the tab title when bouncing around to different nodes
+#export PROMPT_COMMAND='echo -en "\033]0;${USER}@$(hostname -s)\a"'
+# are we an interactive shell?
+if [ "$PS1" ]; then
+  if [ -z "$PROMPT_COMMAND" ]; then
+    case $TERM in
+    xterm*)
+      if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+          PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+      else
+          PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+      fi
+      ;;
+    screen)
+      if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+          PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+      else
+          PROMPT_COMMAND='printf "\033]0;%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+      fi
+      ;;
+    *)
+      [ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+      ;;
+    esac
+  fi
+  # Turn on parallel history
+#  shopt -s histappend
+#  history -a
+  # Turn on checkwinsize
+#  shopt -s checkwinsize
+  [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \W]\\$ "
+  # You might want to have e.g. tty in prompt (e.g. more virtual machines)
+  # and console windows
+  # If you want to do so, just add e.g.
+  # if [ "$PS1" ]; then
+  #   PS1="[\u@\h:\l \W]\\$ "
+  # fi
+  # to your custom modification shell script in /etc/profile.d/ directory
+fi
+
+if [[ "$(hostname -s)" =~ "rcs-mjh2" ]]; then
+  export PATH="/Users/mhanby/bin:/Users/mhanby/local/bin:/Users/mhanby/.local/sbin:/Users/mhanby/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
+else
+  export PATH="${HOME}/bin:${HOME}/local/bin:${PATH}"
+fi
