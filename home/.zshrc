@@ -22,7 +22,7 @@ ZSH_THEME="cobalt2"
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 #ENABLE_CORRECTION="true"
@@ -219,6 +219,22 @@ function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
 
 #function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
+
+# Set the tab title
+# http://tldp.org/HOWTO/Xterm-Title-4.html
+#  precmd ()   a function which is executed just before each prompt
+#  chpwd ()    a function which is executed whenever the directory is changed
+#  \e          escape sequence for escape (ESC)
+#  \a          escape sequence for bell (BEL)
+#  %n          expands to $USERNAME
+#  %m          expands to hostname up to first '.'
+#  %~          expands to directory, replacing $HOME with '~'
+#
+case $TERM in
+    xterm*)
+        precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+        ;;
+esac
 
 # nixCraft (on Facebook) calc recipe
 # Usage: calc "10+2"
