@@ -313,3 +313,20 @@ export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 export PATH="$HOME/local/bin:${PATH}"
 export MANPATH="$HOME/local/share/man:${MANPATH}"
 
+# Hightlight pattern in command output (unlike grep that only returns the matches)
+# http://unix.stackexchange.com/questions/366/convince-grep-to-output-all-lines-not-just-those-with-matches
+# Ex: /usr/bin/rbd --help | highlight showmapped
+highlight () {
+  perl -pe "s/$1/\e[1;31;43m$&\e[0m/g"
+}
+ihighlight () {
+  perl -pe "s/$1/\e[1;31;43m$&\e[0m/ig"
+}
+
+# iTerm2 / 3 Shell Integration
+test -e ${HOME}/.iterm2_shell_integration.bash && source ${HOME}/.iterm2_shell_integration.bash
+
+# Git Stuff
+# Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
+alias gitdiff='git --no-pager diff'
+
