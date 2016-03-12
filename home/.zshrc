@@ -209,6 +209,7 @@ elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha c
 fi # End CHEAHA config
 
 # Host agnostic alias and functions
+alias igrep="grep -i"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
