@@ -7,7 +7,8 @@ export ZSH=${HOME}/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="xiong-chiamiov"
-ZSH_THEME="cobalt2"
+#ZSH_THEME="cobalt2"
+ZSH_THEME="agnoster2"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -254,6 +255,11 @@ if [[ "$(hostname -s)" =~ "rcs-mjh2" ]]; then
   export PATH="/Users/mhanby/bin:/Users/mhanby/local/bin:/Users/mhanby/.local/sbin:/Users/mhanby/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 else
   export PATH="${HOME}/bin:${HOME}/local/bin:${PATH}"
+fi
+
+if [[ "$(uname)" == "Darwin" ]]; then
+  alias md5='md5 -r'
+  alias md5sum='md5 -r'
 fi
 
 # iTerm2 Shell Integration
