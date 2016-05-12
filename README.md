@@ -25,7 +25,7 @@ cd fonts
 # If running in Gnome Terminal, set the default profile font to Powerline
 if [ `echo $VTE_VERSION` -eq 3409 ]; then
   oldfont=$(gconftool-2 --get /apps/gnome-terminal/profiles/Default/font)
-  newfont="Meslo LG M for Powerline 9"
+  newfont="Meslo LG M DZ for Powerline 8"
 
   echo "Changing gnome-terminal Default profile font from: '$oldfont' to '$newfont'"
   gconftool-2 --set /apps/gnome-terminal/profiles/Default/font --type string "$newfont"
