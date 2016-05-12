@@ -13,6 +13,25 @@ cd dotfiles/home
 cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
 cp -a .oh-my-zsh/themes/* ~/.oh-my-zsh/themes/
 
+# Powerline fonts - https://github.com/powerline/fonts - are used by Agnoster theme
+# https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
+#
+# Without these, the prompt will show control chars instead of fancy seperators
+cd ~/git
+git clone https://github.com/powerline/fonts.git
+cd fonts
+./install.sh
+
+# If running in Gnome Terminal, set the default profile font to Powerline
+if [ `echo $VTE_VERSION` -eq 3409 ]; then
+  oldfont=$(gconftool-2 --get /apps/gnome-terminal/profiles/Default/font)
+  newfont="Meslo LG M for Powerline 9"
+
+  echo "Changing gnome-terminal Default profile font from: '$oldfont' to '$newfont'"
+  gconftool-2 --set /apps/gnome-terminal/profiles/Default/font --type string "$newfont"
+fi
+
+
 mkdir -p ~/.vim/bundle
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim -c ":PluginInstall"
