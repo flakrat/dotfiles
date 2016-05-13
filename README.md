@@ -22,13 +22,21 @@ git clone https://github.com/powerline/fonts.git
 cd fonts
 ./install.sh
 
-# If running in Gnome Terminal, set the default profile font to Powerline
-if [ `echo $VTE_VERSION` -eq 3409 ]; then
-  oldfont=$(gconftool-2 --get /apps/gnome-terminal/profiles/Default/font)
+# If running in Gnome Terminal, set the default profile font to Powerline and background color
+if [ ${VTE_VERSION+x} ]; then
+  profile="$(gconftool-2 --get /apps/gnome-terminal/global/default_profile)"
+
+  oldbkcolor="$(gconftool-2 --get /apps/gnome-terminal/profiles/${profile}/background_color)"
+  newbkcolor='#00002B2B3636'
+  echo "Changing gnome-terminal ${profile} profile background_color from '$oldbkcolor' to '$newbkcolor'"
+  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/background_color --type string "$newbkcolor"
+
+  oldfont="$(gconftool-2 --get /apps/gnome-terminal/profiles/${profile}/font)"
   newfont="Meslo LG M DZ for Powerline 8"
 
-  echo "Changing gnome-terminal Default profile font from: '$oldfont' to '$newfont'"
-  gconftool-2 --set /apps/gnome-terminal/profiles/Default/font --type string "$newfont"
+  echo "Changing gnome-terminal ${profile} profile font from: '$oldfont' to '$newfont'"
+  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/use_system_font --type bool false
+  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/font --type string "$newfont"
 fi
 
 
