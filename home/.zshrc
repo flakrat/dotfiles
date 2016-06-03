@@ -269,4 +269,5 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
 alias gitdiff='git --no-pager diff'
 
+export SHELL=`which zsh`
 
