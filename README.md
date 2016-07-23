@@ -9,7 +9,8 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 mkdir ~/git
 cd ~/git
 git clone https://github.com/flakrat/dotfiles.git
-cd dotfiles/home
+cd ~/git/dotfiles/home
+cp -a .vim ~/
 cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
 cp -a .oh-my-zsh/themes/* ~/.oh-my-zsh/themes/
 
