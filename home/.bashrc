@@ -138,9 +138,9 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   module load slurm
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
-elif [[ "$(hostname -s)" =~ "shealy|login" ]]; then # BrightCM Compute Nodes
-  module load rc-base
-  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
+elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+   module load rc-base
+   alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
 elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
@@ -298,6 +298,8 @@ fi
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then
   export HISTFILE="$HOME/.bash_history_cheaha"
+elif [[ "$(hostname -s)" =~ "shealy|c[0-9][0-9][0-9][0-9]" ]]; then
+  HISTFILE="$HOME/.zsh_history_compute"
 else
   export HISTFILE="$HOME/.bash_history_${srvr}"
 fi
