@@ -86,6 +86,8 @@ fi
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then
   HISTFILE="$HOME/.zsh_history_cheaha"
+elif [[ "$(hostname -s)" =~ "shealy|c[0-9][0-9][0-9][0-9]" ]]; then
+  HISTFILE="$HOME/.zsh_history_compute"
 else
   HISTFILE="$HOME/.zsh_history_${srvr}"
 fi
@@ -127,7 +129,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   module load slurm
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
-elif [[ "$(hostname -s)" =~ "shealy|login" ]]; then # BrightCM Compute Nodes
+elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   module load rc-base
   alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
 elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
@@ -254,7 +256,7 @@ export MANPATH="$HOME/local/share/man:${MANPATH}"
 if [[ "$(hostname -s)" =~ "rcs-mjh2" ]]; then
   export PATH="/Users/mhanby/bin:/Users/mhanby/local/bin:/Users/mhanby/.local/sbin:/Users/mhanby/.local/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 else
-  export PATH="${HOME}/bin:${HOME}/local/bin:${PATH}"
+  export PATH="${HOME}/.local/bin:${HOME}/bin:${HOME}/local/bin:${PATH}"
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -268,6 +270,11 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 # Git Stuff
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
 alias gitdiff='git --no-pager diff'
+
+#powerline-daemon -q
+#POWERLINE_BASH_CONTINUATION=1
+#POWERLINE_BASH_SELECT=1
+#. /usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 export SHELL=`which zsh`
 
