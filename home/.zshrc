@@ -271,6 +271,48 @@ test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_in
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
 alias gitdiff='git --no-pager diff'
 
+# https://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
+alias mountpretty='mount |column -t'
+alias datepretty='date +"%Y%m%d_%H%M%S"'
+alias ports='netstat -tulanp'
+#alias wakeupnas01='/usr/bin/wakeonlan 00:11:32:11:15:FC'
+#alias wakeupnas02='/usr/bin/wakeonlan 00:11:32:11:15:FD'
+#alias wakeupnas03='/usr/bin/wakeonlan 00:11:32:11:15:FE'
+alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
+alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
+alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
+alias iptlistfw='sudo /sbin/iptables -L FORWARD -n -v --line-numbers'
+alias firewall=iptlist
+## pass options to free ##
+alias meminfo='free -m -l -t'
+
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+
+## Get server cpu info ##
+alias cpuinfo='lscpu'
+
+## older system use /proc/cpuinfo ##
+##alias cpuinfo='less /proc/cpuinfo' ##
+
+## get GPU ram on desktop / laptop##
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+## grep without comments
+alias nocomment='grep -Ev '\''^(#|$)'\'''
+alias lt='ls -alrt'
+alias tf='tail -f '
+alias psg='ps auxf | grep '
+alias fastping='ping -c 5 -s.2'
+mcd () {
+  mkdir -p $1;
+  cd $1
+}
+
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
 #POWERLINE_BASH_SELECT=1
