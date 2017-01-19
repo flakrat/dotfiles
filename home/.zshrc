@@ -121,21 +121,35 @@ ihighlight () {
 # Systemd
 alias systemctl_list="systemctl list-unit-files --type=service"
 
+# All cluster nodes
+if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+  alias downhosts="sinfo --states=down | grep -v PART | awk '{print \$6}' | sort | uniq"
+  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
+  alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.6D %.6C %.8t %.10M %.12l %.12L %.35Z %R"'
+  #alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8C %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
+
+  # Function to display the current number of allocated cpu cores
+  function used_cores()  {
+    n=0;
+    for cpus in $(squeue --all --noheader --states=running --format "%.6C" ); do
+      let n=$n+cpus;
+    done ;
+    echo $n
+  }
+  # downhosts displays compute nodes with SGE status a,u,d
+fi
+
 # BrightCM Master Node
 if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   # Uncomment the following line if you don't like systemctl's auto-paging feature:
   # export SYSTEMD_PAGER=
   module load cmsh
   module load slurm
-  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
-  alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   module load rc-base
-  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
-  alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
-elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
+elif [[ "$(hostname -s)" =~ "compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
@@ -174,7 +188,7 @@ elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha c
   function downhosts_queue          { downhosts | cut -d" " -f 1 | perl -pi -e "s/^(.*)\..*/\1/g"; }
   # This function displays jobs assigned to compute nodes returned by downhosts()
   function downhosts_qstat()        { for host in $(downhosts_queue); do qstat -u \* -f -s r -q $host; done }
-#  for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do echo $job; qstat -j $job | egrep "^parallel|virtual_free|maxvmem"; done
+  for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do echo $job; qstat -j $job | egrep "^parallel|virtual_free|maxvmem"; done
   function downhosts_job_details()  {
     for job in $(downhosts_qstat | grep ^" [0-9]" | awk '{print $1}'); do
       echo -----------------------------------------------------;
@@ -320,7 +334,7 @@ alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uni
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
 #POWERLINE_BASH_SELECT=1
-#. /usr/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+#. /home/mhanby/.local/lib//python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 export SHELL=`which zsh`
 
