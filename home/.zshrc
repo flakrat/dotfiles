@@ -6,9 +6,13 @@ export ZSH=${HOME}/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
+ZSH_THEME="bureau-flakrat"
 #ZSH_THEME="xiong-chiamiov"
 #ZSH_THEME="cobalt2"
-ZSH_THEME="agnoster2"
+#ZSH_THEME="agnoster2"
+#ZSH_THEME="ys"
+#ZSH_THEME="wezm+"
+#ZSH_THEME="nanotech-flakrat"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -123,11 +127,27 @@ alias systemctl_list="systemctl list-unit-files --type=service"
 
 # All cluster nodes
 if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
-  alias downhosts="sinfo --states=down | grep -v PART | awk '{print \$6}' | sort | uniq"
-  alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
-  alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.6D %.6C %.8t %.10M %.12l %.12L %.35Z %R"'
+  alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
+  alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
+  alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
+  alias sinfo_drained="sinfo --states=drain --noheader | awk '{print \$6}' | sort | uniq"
+  alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
+  alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
+  alias squeue_full2='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %Z %o"'
+  alias squeue_jobscript='squeue --format "%.10i %.12u %o"'
+  alias squeue_jobdir='squeue --format "%.10i %.12u %Z"'
+  alias squeue_jobstarttime='squeue --format "%.10i %.12u %S"'
+  alias squeue_jobendtime='squeue --format "%.10i %.12u %e"'
+  alias squeue_jobruntime='squeue --format "%.10i %.12u %M"'
+  alias squeue_jobtimeleft='squeue --format "%.10i %.12u %L"'
   #alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8C %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
 
+  # lsof alternative because lsof hangs when a file system (NSF usually) is unresponsive
+  function lsof_alt() {
+    for FD in /proc/*/fd/*; do
+      readlink $FD 2> /dev/null | grep ^/$1 ;
+    done
+  }
   # Function to display the current number of allocated cpu cores
   function used_cores()  {
     n=0;
@@ -144,7 +164,11 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   # Uncomment the following line if you don't like systemctl's auto-paging feature:
   # export SYSTEMD_PAGER=
   module load cmsh
+  module load rc-base
   module load slurm
+
+  # Cheaha-master aliases
+  alias downhouse='cmsh -c "device status | grep DOWN"'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
