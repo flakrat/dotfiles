@@ -6,10 +6,10 @@ export ZSH=${HOME}/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
-ZSH_THEME="bureau-flakrat"
+#ZSH_THEME="bureau-flakrat"
 #ZSH_THEME="xiong-chiamiov"
-#ZSH_THEME="cobalt2"
-#ZSH_THEME="agnoster2"
+#ZSH_THEME="cobalt2-flakrat"
+ZSH_THEME="agnoster-flakrat"
 #ZSH_THEME="ys"
 #ZSH_THEME="wezm+"
 #ZSH_THEME="nanotech-flakrat"

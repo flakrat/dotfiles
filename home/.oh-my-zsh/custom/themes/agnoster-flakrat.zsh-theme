@@ -44,7 +44,10 @@ CURRENT_BG='NONE'
   # what font the user is viewing this source code in. Do not replace the
   # escape sequence with a single literal character.
   # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
-  SEGMENT_SEPARATOR=$'\ue0b0'
+
+  # The following is the > facing triangle
+  #SEGMENT_SEPARATOR=$'\ue0b0'
+  SEGMENT_SEPARATOR='::'
 }
 
 # Begin a segment
@@ -123,7 +126,9 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    #echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    # Remove PL_BRANCH_CHAR since it doesn't copy and paste well into Gitlab markdown
+    echo -n "${ref/refs\/heads\//[ }${vcs_info_msg_0_%% }${mode} ]"
   fi
 }
 
@@ -162,10 +167,11 @@ prompt_hg() {
   fi
 }
 
-# Flakrat - Build Date
+# Date: current date and time
 prompt_date() {
-#  prompt_segment purple white "%D{%a %b %d, %I:%M}"
-  prompt_segment green black "%D{%Y%m%d %H:%M:%S}"
+  #prompt_segment green black "%D{%Y%m%d %H:%M:%S}"
+  # 238 is slate gray, see output of `spectrum_ls` command included with oh-my-zsh
+  prompt_segment 238 white "%D{%Y%m%d %H:%M:%S}"
 }
 
 # Dir: current working directory
@@ -205,7 +211,30 @@ build_prompt() {
   prompt_dir
   prompt_git
   prompt_hg
-  prompt_end
+  #prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
+agnoster_precmd () {
+  #print
+  print -rP "%{%f%b%k%}$(build_prompt)"
+}
+
+#PROMPT='%{%f%b%k%}$(build_prompt) '
+
+# Borrowed from the bureau theme
+if [[ $EUID -eq 0 ]]; then
+  _USERNAME="%{$fg_bold[red]%}%n"
+  _LIBERTY="%{$fg[red]%}#"
+else
+  _USERNAME="%{$fg_bold[white]%}%n"
+  _LIBERTY="%{$fg[green]%}$"
+fi
+_USERNAME="$_USERNAME%{$reset_color%}@%m"
+_LIBERTY="$_LIBERTY%{$reset_color%}"
+
+setopt prompt_subst
+PROMPT='> $_LIBERTY '
+
+autoload -U add-zsh-hook
+add-zsh-hook precmd agnoster_precmd
+
