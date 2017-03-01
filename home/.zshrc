@@ -129,6 +129,7 @@ alias systemctl_list="systemctl list-unit-files --type=service"
 if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
+  alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
   alias sinfo_drained="sinfo --states=drain --noheader | awk '{print \$6}' | sort | uniq"
   alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
