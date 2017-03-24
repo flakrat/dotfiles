@@ -330,6 +330,7 @@ ihighlight () {
 
 # iTerm2 / 3 Shell Integration
 #test -e ${HOME}/.iterm2_shell_integration.bash && source ${HOME}/.iterm2_shell_integration.bash
+${HOME}/isiterm2.sh && test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
 # Git Stuff
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
