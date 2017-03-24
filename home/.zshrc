@@ -307,7 +307,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 fi
 
 # iTerm2 Shell Integration
-test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+#test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
 
 # Git Stuff
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
