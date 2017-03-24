@@ -356,6 +356,12 @@ mcd () {
   cd $1
 }
 alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uniq -c | sort -rn | head"
+alias openfiles="cat /proc/sys/fs/file-nr"
+alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
+
+if [ -f $HOME/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ]; then
+  source ~/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh
+fi
 
 #powerline-daemon -q
 #POWERLINE_BASH_CONTINUATION=1
