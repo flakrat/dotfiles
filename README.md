@@ -15,6 +15,7 @@ cd ~/git/dotfiles/home
 cp -a .vim ~/
 cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
 cp -a .oh-my-zsh/custom/themes ~/.oh-my-zsh/custom/
+cp -a isiterm2.sh ~/
 
 # Powerline fonts - https://github.com/powerline/fonts - are used by Agnoster theme
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/themes/agnoster.zsh-theme
