@@ -127,7 +127,17 @@ alias systemctl_list="systemctl list-unit-files --type=service"
 
 # All cluster nodes
 if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+  ## Begin GPFS
+  alias mmlsquota_scratch='mmlsquota -v -j scratch BigGreen --block-size=auto'
+  alias mmlsquota_user='mmlsquota -u $USER BigGreen:user --block-size=auto'
+  mmlsquota_project () {
+    mmlsquota -v -j $1 BigGreen --block-size auto
+  }
+  ## End GPFS
+
+  ## Begin Slurm aliases
   alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
+  alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
@@ -142,6 +152,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias squeue_jobruntime='squeue --format "%.10i %.12u %M"'
   alias squeue_jobtimeleft='squeue --format "%.10i %.12u %L"'
   #alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8C %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
+  ## End Slurm aliases
 
   # lsof alternative because lsof hangs when a file system (NSF usually) is unresponsive
   function lsof_alt() {
@@ -157,7 +168,6 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
     done ;
     echo $n
   }
-  # downhosts displays compute nodes with SGE status a,u,d
 fi
 
 # BrightCM Master Node
@@ -169,7 +179,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   module load slurm
 
   # Cheaha-master aliases
-  alias downhouse='cmsh -c "device status | grep DOWN"'
+  alias downhosts='cmsh -c "device status | grep DOWN"'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
@@ -258,7 +268,8 @@ alias igrep="grep -i"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
-alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
+#alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
+alias proclist='ps auxf | grep -v "0.[0-9]  0"'
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage
@@ -287,7 +298,8 @@ esac
 #   Pi:  calc "scale=10; 4*a(1)"
 # Temperature: calc "30 * 1.8 + 32"
 #              calc "(86 - 32)/1.8"
-calc() { echo "$*" | bc -l; }
+calc_full() { echo "$*" | bc -l; }
+calc() { echo "scale=2; $*" | bc -l; }
 
 # Ruby
 export RUBYVER=`ruby --version | cut -d" " -f 2 | cut -d. -f 1,2`
@@ -358,6 +370,7 @@ mcd () {
 alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uniq -c | sort -rn | head"
 alias openfiles="cat /proc/sys/fs/file-nr"
 alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
+alias vnclist_count="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | sort | uniq -c | grep -v ' 1 '"
 
 if [ -f $HOME/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ]; then
   source ~/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh
