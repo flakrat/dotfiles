@@ -15,7 +15,7 @@ esac
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+#####shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
@@ -140,10 +140,11 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   module load slurm
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
-elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+elif [[ "$(hostname -s)" =~ login|c[0-9][0-9][0-9][0-9] ]]; then # BrightCM Compute Nodes
+  . /etc/profile.d/modules.sh
    module load rc-base
-   alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
-elif [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then # Begin Rocks 5.5 Cheaha config
+   alias sacct_full="sacct --format=User,JobID,JobName,account,Start,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
+elif [[ "$(hostname -s)" =~ cheaha|compute ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
   export EDITOR="/home/mhanby/local/bin/vim"
@@ -309,7 +310,7 @@ export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
 export HISTSIZE=100000                   # big big history
 export HISTFILESIZE=100000               # big big history
 export HISTTIMEFORMAT='%F %T '           # Include history time stamps
-shopt -s histappend                      # append to history, don't overwrite it
+#####shopt -s histappend                      # append to history, don't overwrite it
 
 # Save and reload the history after each command finishes
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
@@ -330,7 +331,6 @@ ihighlight () {
 
 # iTerm2 / 3 Shell Integration
 #test -e ${HOME}/.iterm2_shell_integration.bash && source ${HOME}/.iterm2_shell_integration.bash
-${HOME}/isiterm2.sh && test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
 # Git Stuff
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once

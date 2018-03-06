@@ -112,6 +112,11 @@ setopt extendedhistory
 # Set VI mode (i.e. BASH equiv of set -o vi)
 bindkey -v
 
+# https://dougblack.io/words/zsh-vi-mode.html
+# By default, there is a 0.4 second delay after you hit the <ESC> key and when the mode change is registered. 
+# This results in a very jarring and frustrating transition between modes. Let's reduce this delay to 0.1 seconds
+export KEYTIMEOUT=1
+
 # Hightlight pattern in command output (unlike grep that only returns the matches)
 # http://unix.stackexchange.com/questions/366/convince-grep-to-output-all-lines-not-just-those-with-matches
 # Ex: /usr/bin/rbd --help | highlight showmapped
@@ -124,6 +129,9 @@ ihighlight () {
 
 # Systemd
 alias systemctl_list="systemctl list-unit-files --type=service"
+
+# Dell commands
+alias servicetag="/opt/dell/srvadmin/bin/omreport chassis info | grep 'Service Tag' | awk '{print \$5}'"
 
 # All cluster nodes
 if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
@@ -142,8 +150,8 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
   alias sinfo_drained="sinfo --states=drain --noheader | awk '{print \$6}' | sort | uniq"
-  alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode"
-  alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
+  alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
+  alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.6Q %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
   alias squeue_full2='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %Z %o"'
   alias squeue_jobscript='squeue --format "%.10i %.12u %o"'
   alias squeue_jobdir='squeue --format "%.10i %.12u %Z"'
@@ -180,6 +188,8 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
 
   # Cheaha-master aliases
   alias downhosts='cmsh -c "device status | grep DOWN"'
+  alias ansible_root='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts'
+  alias reboot_computenodes='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts computenodes -a "/sbin/shutdown -r +1" --one-line'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
@@ -270,6 +280,7 @@ alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
 #alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
 alias proclist='ps auxf | grep -v "0.[0-9]  0"'
+alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage
@@ -345,6 +356,9 @@ alias meminfo='free -m -l -t'
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
+## View server hardware model (VMware, KVM, PowerEdge, etc...)
+alias host_model='cat /sys/devices/virtual/dmi/id/product_name'
+
 ## get top process eating cpu ##
 alias pscpu='ps auxf | sort -nr -k 3'
 alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
@@ -358,7 +372,7 @@ alias cpuinfo='lscpu'
 ## get GPU ram on desktop / laptop##
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## grep without comments
-alias nocomment='grep -Ev '\''^(#|$)'\'''
+alias nocomment='grep -Ev '\''^(#|$|;)'\'''
 alias lt='ls -alrt'
 alias tf='tail -f '
 alias psg='ps auxf | grep '
@@ -371,6 +385,10 @@ alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uni
 alias openfiles="cat /proc/sys/fs/file-nr"
 alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
 alias vnclist_count="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | sort | uniq -c | grep -v ' 1 '"
+alias sccm_version="grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \$4}' | tail -n 1"
+alias sccm_version_all="ansible sccm -m shell -a \"grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \\\$4}' | tail -n 1\" --one-line"
+alias ansible_group_list="ansible localhost -m debug -a 'var=groups.keys()'"
+alias ansible_group_membership="ansible localhost -m debug -a 'var=groups'"
 
 if [ -f $HOME/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh ]; then
   source ~/.gem/ruby/gems/tmuxinator-0.9.0/completion/tmuxinator.zsh
