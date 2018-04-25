@@ -18,7 +18,7 @@ ZSH_THEME="agnoster-flakrat"
 # CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+#DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -144,11 +144,36 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   ## End GPFS
 
   ## Begin Slurm aliases
+  # WIP - Hold all pending jobs for user
+#  function scontrol_hold_user () {
+#    if [[ "$1" == "" ]]; then
+#      echo "No user specified!"
+#      #exit 1
+#    else
+#      user=$1
+#      script=/tmp/holduser-$user-$(date "+%Y.%m.%d-%H.%M.%S")
+#      echo '#!/bin/bash' > $script
+#      squeue --user=$user -h -o "sudo /cm/shared/apps/slurm/current/bin/scontrol hold %i" >> $script
+#      chmod +x $script
+#      echo "The following script will now be executed to hold pending jobs: $script"
+#      /bin/bash $script
+#    fi
+#  }
   alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
   alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
+  sinfo_drained_reason () {
+    for node in $(sinfo --states=drain --noheader | awk '{print $6}' | sort | uniq); do
+      scontrol show node $node | egrep "NodeName|mem|Reason"
+    done
+  }
+  scontrol_undrain_all () {
+    for node in $(sinfo --states=drain --noheader | awk '{print $6}' | sort | uniq); do
+      sudo /cm/shared/apps/slurm/current/bin/scontrol update NodeName="$node" State=undrain
+    done
+  }
   alias sinfo_drained="sinfo --states=drain --noheader | awk '{print \$6}' | sort | uniq"
   alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
   alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.6Q %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
@@ -280,6 +305,7 @@ alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
 #alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
 alias proclist='ps auxf | grep -v "0.[0-9]  0"'
+alias proclist2='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | grep -v " 0.0  0.0    [0-9]"'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
