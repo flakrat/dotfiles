@@ -18,7 +18,7 @@ ZSH_THEME="agnoster-flakrat"
 # CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-#DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -178,6 +178,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
   alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.6Q %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
   alias squeue_full2='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %Z %o"'
+  alias squeue_full3='squeue -O "jobid,partition,name,username,tres,state,reasonlist,starttime,timeleft,workdir"'
   alias squeue_jobscript='squeue --format "%.10i %.12u %o"'
   alias squeue_jobdir='squeue --format "%.10i %.12u %Z"'
   alias squeue_jobstarttime='squeue --format "%.10i %.12u %S"'
