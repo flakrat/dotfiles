@@ -27,6 +27,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
+" Powerline fonts
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
 " VIM Puppet plugin - https://github.com/rodjek/vim-puppet
 Plugin 'rodjek/vim-puppet'
 
