@@ -197,15 +197,17 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
       readlink $FD 2> /dev/null | grep ^/$1 ;
     done
   }
-  # Function to display the current number of allocated cpu cores
-  function used_cores()  {
-    n=0;
-    for cpus in $(squeue --all --noheader --states=running --format "%.6C" ); do
-      let n=$n+cpus;
-    done ;
-    echo $n
-  }
+  # Alias to display the current number of allocated cpu cores
+  alias used_cores='sinfo -a -o "%C"'
+#  function used_cores()  {
+#    n=0;
+#    for cpus in $(squeue --all --noheader --states=running --format "%.6C" ); do
+#      let n=$n+cpus;
+#    done ;
+#    echo $n
+#  }
 fi
+# End All cluster nodes
 
 # BrightCM Master Node
 if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
@@ -413,8 +415,9 @@ mcd () {
 }
 alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uniq -c | sort -rn | head"
 alias openfiles="cat /proc/sys/fs/file-nr"
-alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
-alias vnclist_count="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | sort | uniq -c | grep -v ' 1 '"
+#alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
+alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$16 \"\t\" \$22}' | column -s \$'\t' -t"
+alias vnclist_count="ps -eo user:25,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | uniq -c | grep -v ' 1 ' | sort -r"
 alias sccm_version="grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \$4}' | tail -n 1"
 alias sccm_version_all="ansible sccm -m shell -a \"grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \\\$4}' | tail -n 1\" --one-line"
 alias ansible_group_list="ansible localhost -m debug -a 'var=groups.keys()'"
