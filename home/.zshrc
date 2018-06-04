@@ -310,8 +310,8 @@ alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
 #alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
-alias proclist='ps auxf | grep -v "0.[0-9]  0"'
-alias proclist2='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | grep -v " 0.0  0.0    [0-9]"'
+#alias proclist='ps auxf | grep -v "0.[0-9]  0"'
+alias proclist='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | egrep -v " 0.[0-9]  0.[0-9] "'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
