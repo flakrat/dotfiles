@@ -20,9 +20,21 @@ sudo yum -y install zsh
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Clone dotfiles and copy some of the config files
-mkdir ~/git
+if [[ ! -d "~/git" ]]; then
+  mkdir ~/git
+fi
 cd ~/git
 git clone https://github.com/flakrat/dotfiles.git
+
+# Install the PowerLevel9k (https://github.com/bhilburn/powerlevel9k) theme into oh-my-zsh, followed by optionally copying my slight mod (adds current date and time to the prompt)
+if [[ ! -d "~/.oh-my-zsh/custom/themes" ]]; then
+  mkdir -p ~/.oh-my-zsh/custom/themes
+fi
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+cp -a ~/git/dotfiles/home/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
+  ~/.oh-my-zsh/custom/themes/powerlevel9k/
+
+# Copy some of the config files
 cd ~/git/dotfiles/home
 cp -a .vim ~/
 cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
@@ -31,6 +43,13 @@ cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 #
+if [[ ! -d "~/.local/share/fonts" ]]; then
+  mkdir -p ~/.local/share/fonts
+fi
+if [[ ! -d "~/.config/fontconfig/conf.d" ]]; then
+  mkdir -p ~/.config/fontconfig/conf.d
+fi
+
 if [[ ! -d "~/tmp" ]]; then mkdir ~/tmp; fi
 cd ~/tmp
 wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip
@@ -40,12 +59,6 @@ cp -a ttf/Hack*.ttf ~/.local/share/fonts/
 cd ~/.config/fontconfig/conf.d/
 curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/10-nerd-font-symbols.conf
 fc-cache -f -v
-
-# Install the PowerLevel9k (https://github.com/bhilburn/powerlevel9k) theme into oh-my-zsh, followed by optionally copying my slight mod (adds current date and time to the prompt)
-cd ~/git/dotfiles/home
-git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-cp -a .oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
-  ~/.oh-my-zsh/custom/themes/powerlevel9k/
 
 # Install Vim bundles
 mkdir -p ~/.vim/bundle
