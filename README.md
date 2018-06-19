@@ -13,8 +13,8 @@ Beard's GitHub: https://github.com/joshbeard/dotfiles
 TODO: Turn this into an Ansible playbook
 
 ```shell
-# Install zsh if not already installed
-sudo yum -y install zsh
+# Install zsh and other helper apps if not already installed
+sudo yum -y install zsh unzip wget curl
 
 # Install Oh-my-zsh (http://ohmyz.sh/)
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
