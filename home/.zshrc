@@ -438,3 +438,7 @@ export SHELL=`which zsh`
 # disable GTK+ message "Couldn't connect to accessibility bus"
 export NO_AT_BRIDGE=1
 
+# Source .zshrc.local to allow for local configuration
+if [ -f $HOME/.zshrc.local ]; then
+  source $HOME/.zshrc.local
+fi
