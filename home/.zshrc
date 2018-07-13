@@ -3,6 +3,8 @@ export ZSH=${HOME}/.oh-my-zsh
 
 export POWERLEVEL9K_MODE='awesome-fontconfig'
 
+export TERM="xterm-256color"
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
