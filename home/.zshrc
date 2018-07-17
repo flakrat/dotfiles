@@ -225,7 +225,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   alias reboot_computenodes='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts computenodes -a "/sbin/shutdown -r +1" --one-line'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
-elif [[ "$(hostname -s)" =~ "shealy|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+elif [[ "$(hostname -s)" =~ "shealy|login[0-9][0-9]|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   module load rc-base
 elif [[ "$(hostname -s)" =~ "compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`

@@ -20,10 +20,10 @@ sudo yum -y install zsh unzip wget curl
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Clone dotfiles and copy some of the config files
-if [[ ! -d "~/git" ]]; then
-  mkdir ~/git
+if [[ ! -d "~/git/flakrat" ]]; then
+  mkdir -p ~/git/flakrat
 fi
-cd ~/git
+cd ~/git/flakrat
 git clone https://github.com/flakrat/dotfiles.git
 
 # Install the PowerLevel9k (https://github.com/bhilburn/powerlevel9k) theme into oh-my-zsh, followed by optionally copying my slight mod (adds current date and time to the prompt)
@@ -31,11 +31,11 @@ if [[ ! -d "~/.oh-my-zsh/custom/themes" ]]; then
   mkdir -p ~/.oh-my-zsh/custom/themes
 fi
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-cp -a ~/git/dotfiles/home/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
+cp -a ~/git/flakrat/dotfiles/home/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
   ~/.oh-my-zsh/custom/themes/powerlevel9k/
 
 # Copy some of the config files
-cd ~/git/dotfiles/home
+cd ~/git/flakrat/dotfiles/home
 cp -a .vim ~/
 cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
 cp -a .oh-my-zsh/custom/themes ~/.oh-my-zsh/custom/
