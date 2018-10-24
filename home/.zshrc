@@ -5,6 +5,11 @@ export POWERLEVEL9K_MODE='awesome-fontconfig'
 
 # Disable the right prompt, sucks for copy and paste into tickets
 export POWERLEVEL9K_DISABLE_RPROMPT=true
+# Default Left and Right prompts, I'm combining them bc I routinely copy and paste from the
+# command line into notes / support tickets and the RPROMT doesn't paste well
+#         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
+#         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
+export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context history time dir vcs status)
 
 export TERM="xterm-256color"
 

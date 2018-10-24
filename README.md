@@ -14,7 +14,7 @@ TODO: Turn this into an Ansible playbook
 
 ```shell
 # Install zsh and other helper apps if not already installed
-sudo yum -y install zsh unzip wget curl
+sudo yum -y install zsh unzip wget curl git
 
 # Install Oh-my-zsh (http://ohmyz.sh/)
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
