@@ -202,6 +202,9 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   #alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8C %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
   ## End Slurm aliases
 
+  ## Nvidia GPU Cuda stuff
+  alias nvidia-query="nvidia-smi --query-gpu=gpu_name,gpu_bus_id,vbios_version --format=csv"
+
   # lsof alternative because lsof hangs when a file system (NSF usually) is unresponsive
   function lsof_alt() {
     for FD in /proc/*/fd/*; do
@@ -432,6 +435,7 @@ alias openfiles="cat /proc/sys/fs/file-nr"
 #alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
 alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$16 \"\t\" \$22}' | column -s \$'\t' -t"
 alias vnclist_count="ps -eo user:25,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | uniq -c | grep -v ' 1 ' | sort -r"
+alias vnclist_cputime="ps -eo etimes:25,time:25,user:25,pid,lstart,cmd --sort=+user | grep Xvnc | grep -v grep | grep -v thinlinc | sort -k1 -r -n | awk '{print \$3 \"\t\" \$4 \"\t\" \$6 \"-\" \$7 \"-\" \$9 \"_\" \$8 \"\t\" \$18 \"\t\" \$24 \"\t\" \$2}' | sort -k6 -n | column -s \$'\t' -t"
 alias sccm_version="grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \$4}' | tail -n 1"
 alias sccm_version_all="ansible sccm -m shell -a \"grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \\\$4}' | tail -n 1\" --one-line"
 alias ansible_group_list="ansible localhost -m debug -a 'var=groups.keys()'"
