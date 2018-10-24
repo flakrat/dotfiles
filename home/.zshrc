@@ -3,6 +3,9 @@ export ZSH=${HOME}/.oh-my-zsh
 
 export POWERLEVEL9K_MODE='awesome-fontconfig'
 
+# Disable the right prompt, sucks for copy and paste into tickets
+export POWERLEVEL9K_DISABLE_RPROMPT=true
+
 export TERM="xterm-256color"
 
 # Set name of the theme to load.
@@ -14,7 +17,8 @@ export TERM="xterm-256color"
 #ZSH_THEME="xiong-chiamiov"
 #ZSH_THEME="cobalt2-flakrat"
 #ZSH_THEME="agnoster-flakrat"
-ZSH_THEME="powerlevel9k/powerlevel9k-flakrat"
+#ZSH_THEME="powerlevel9k/powerlevel9k-flakrat"
+ZSH_THEME="powerlevel9k/powerlevel9k"
 #ZSH_THEME="ys"
 #ZSH_THEME="wezm+"
 #ZSH_THEME="nanotech-flakrat"
@@ -358,9 +362,12 @@ else
   export PATH="${HOME}/.local/bin:${HOME}/bin:${HOME}/local/bin:${PATH}"
 fi
 
+## Install 'md5sum' via HomeBrew instead:
+##   brew install md5sha1sum
+
 if [[ "$(uname)" == "Darwin" ]]; then
   alias md5='md5 -r'
-  alias md5sum='md5 -r'
+#  alias md5sum='md5 -r'
 fi
 
 # iTerm2 Shell Integration

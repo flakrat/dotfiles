@@ -31,8 +31,8 @@ if [[ ! -d "~/.oh-my-zsh/custom/themes" ]]; then
   mkdir -p ~/.oh-my-zsh/custom/themes
 fi
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-cp -a ~/git/flakrat/dotfiles/home/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
-  ~/.oh-my-zsh/custom/themes/powerlevel9k/
+#cp -a ~/git/flakrat/dotfiles/home/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k-flakrat.zsh-theme \
+#  ~/.oh-my-zsh/custom/themes/powerlevel9k/
 
 # Copy some of the config files
 cd ~/git/flakrat/dotfiles/home
