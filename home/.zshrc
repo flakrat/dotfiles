@@ -9,7 +9,7 @@ export POWERLEVEL9K_DISABLE_RPROMPT=true
 # command line into notes / support tickets and the RPROMT doesn't paste well
 #         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 #         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
-export POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context history time dir vcs status)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context time dir vcs)
 
 export TERM="xterm-256color"
 
