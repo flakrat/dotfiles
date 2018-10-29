@@ -178,6 +178,12 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
+  slurm_disable_user () {
+    sudo /cm/shared/apps/slurm/current/bin/sacctmgr modify user $1 set maxjobs=0
+  }
+  slurm_enable_user () {
+    sudo /cm/shared/apps/slurm/current/bin/sacctmgr modify user $1 set maxjobs=-1
+  }
   sinfo_drained_reason () {
     for node in $(sinfo --states=drain --noheader | awk '{print $6}' | sort | uniq); do
       scontrol show node $node | egrep "NodeName|mem|Reason"
