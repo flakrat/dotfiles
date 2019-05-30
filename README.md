@@ -14,7 +14,7 @@ TODO: Turn this into an Ansible playbook
 
 ```shell
 # Install zsh and other helper apps if not already installed
-sudo yum -y install zsh unzip wget curl git
+sudo yum -y install zsh wget curl git
 
 # Install Oh-my-zsh (http://ohmyz.sh/)
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -50,15 +50,17 @@ if [[ ! -d "~/.config/fontconfig/conf.d" ]]; then
   mkdir -p ~/.config/fontconfig/conf.d
 fi
 
-if [[ ! -d "~/tmp" ]]; then mkdir ~/tmp; fi
+if [ ! -d ~/tmp ]; then mkdir ~/tmp; fi
 cd ~/tmp
-wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip
-if [[ -d "~/tmp/ttf" ]]; then rm -rf ~/tmp/ttf; fi
-unzip Hack*.zip
+hack=Hack-v3.003-ttf.tar.gz
+wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.tar.gz
+if [ -d ~/tmp/ttf ]; then rm -rf ~/tmp/ttf; fi
+tar -zxf $hack
 cp -a ttf/Hack*.ttf ~/.local/share/fonts/
 cd ~/.config/fontconfig/conf.d/
 curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/10-nerd-font-symbols.conf
 fc-cache -f -v
+unset hack
 
 # Install Vim bundles
 mkdir -p ~/.vim/bundle
