@@ -13,21 +13,22 @@ Beard's GitHub: https://github.com/joshbeard/dotfiles
 TODO: Turn this into an Ansible playbook
 
 ```shell
-# Install zsh and other helper apps if not already installed
+# Install zsh and other helper apps 
+not already installed
 sudo yum -y install zsh wget curl git
 
 # Install Oh-my-zsh (http://ohmyz.sh/)
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Clone dotfiles and copy some of the config files
-if [[ ! -d "~/git/flakrat" ]]; then
+if [ ! -d ~/git/flakrat ]; then
   mkdir -p ~/git/flakrat
 fi
 cd ~/git/flakrat
 git clone https://github.com/flakrat/dotfiles.git
 
 # Install the PowerLevel9k (https://github.com/bhilburn/powerlevel9k) theme into oh-my-zsh, followed by optionally copying my slight mod (adds current date and time to the prompt)
-if [[ ! -d "~/.oh-my-zsh/custom/themes" ]]; then
+if [ ! -d ~/.oh-my-zsh/custom/themes ]; then
   mkdir -p ~/.oh-my-zsh/custom/themes
 fi
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
@@ -43,10 +44,10 @@ cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 #
-if [[ ! -d "~/.local/share/fonts" ]]; then
+if [ ! -d ~/.local/share/fonts ]; then
   mkdir -p ~/.local/share/fonts
 fi
-if [[ ! -d "~/.config/fontconfig/conf.d" ]]; then
+if [ ! -d ~/.config/fontconfig/conf.d ]; then
   mkdir -p ~/.config/fontconfig/conf.d
 fi
 
