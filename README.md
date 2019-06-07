@@ -63,6 +63,15 @@ curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasi
 fc-cache -f -v
 unset hack
 
+# Install Powerline Fonts to support flakrat/tmux-config
+# https://powerline.readthedocs.io/en/latest/installation/linux.html
+cd ~/tmp
+wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+mv PowerlineSymbols.otf ~/.local/share/fonts/
+fc-cache -vf ~/.local/share/fonts/
+mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
+
 # Install Vim bundles
 mkdir -p ~/.vim/bundle
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
