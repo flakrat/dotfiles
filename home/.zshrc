@@ -1,3 +1,6 @@
+# Enable DEBUG
+#set -x
+
 # Path to your oh-my-zsh installation.
 export ZSH=${HOME}/.oh-my-zsh
 
@@ -9,7 +12,8 @@ export POWERLEVEL9K_DISABLE_RPROMPT=true
 # command line into notes / support tickets and the RPROMT doesn't paste well
 #         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 #         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context time dir vcs)
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context time dir vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir vcs)
 
 export TERM="xterm-256color"
 
@@ -68,6 +72,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
+plugins=(zsh-autosuggestions)
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -102,10 +107,10 @@ fi
 
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
 srvr=`hostname -s`
-if [[ "$(hostname -s)" =~ "cheaha|compute" ]]; then
-  HISTFILE="$HOME/.zsh_history_cheaha"
-elif [[ "$(hostname -s)" =~ "shealy|c[0-9][0-9][0-9][0-9]" ]]; then
-  HISTFILE="$HOME/.zsh_history_compute"
+if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
+  HISTFILE="$HOME/.zsh_history_cheaha_compute"
+elif [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
+  HISTFILE="$HOME/.zsh_history_cheaha_master"
 else
   HISTFILE="$HOME/.zsh_history_${srvr}"
 fi
@@ -177,7 +182,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
-  alias sinfo_downhosts="sinfo --states=down --noheader | awk '{print \$6}' | sort | uniq"
+  alias sinfo_downhosts="sinfo --states=down --noheader -N | awk '{print \$1}' | sort | uniq"
   slurm_disable_user () {
     sudo /cm/shared/apps/slurm/current/bin/sacctmgr modify user $1 set maxjobs=0
   }
@@ -185,7 +190,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
     sudo /cm/shared/apps/slurm/current/bin/sacctmgr modify user $1 set maxjobs=-1
   }
   sinfo_drained_reason () {
-    for node in $(sinfo --states=drain --noheader | awk '{print $6}' | sort | uniq); do
+    for node in $(sinfo --states=drain --noheader -N | awk '{print $1}' | sort | uniq); do
       scontrol show node $node | egrep "NodeName|mem|Reason"
     done
   }
@@ -194,8 +199,9 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
       sudo /cm/shared/apps/slurm/current/bin/scontrol update NodeName="$node" State=undrain
     done
   }
-  alias sinfo_drained="sinfo --states=drain --noheader | awk '{print \$6}' | sort | uniq"
-  alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
+  alias sinfo_drained="sinfo --states=drain --noheader -N | awk '{print \$1}' | sort | uniq"
+  #alias sacct_full="sacct --allusers --format=User,JobID,JobName,account,Start,End,State,Timelimit,elapsed,NCPUS,NNodes,NTasks,QOS,ReqMem,MaxRss,ExitCode,NodeList"
+  alias sacct_full="sacct --allusers --format=User,JobID,JobName,Partition,State,Submit,TimeLimit,Start,End,Elapsed,ReqCPU,ReqMem,MaxRSS,MaxVMSize,NNodes,NTasks,Reservation,NodeList"
   alias squeue_full='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.6Q %.4t %.11M %.16S %.16L %.16e %.14R %.14Z %.25o"'
   alias squeue_full2='squeue --format "%.8i %.9P %.8j %.8u %.6D %.4C %.4t %.11M %.16S %.16L %.16e %.14R %Z %o"'
   alias squeue_full3='squeue -O "jobid,partition,name,username,tres,state,reasonlist,starttime,timeleft,workdir"'
@@ -234,8 +240,8 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   # Uncomment the following line if you don't like systemctl's auto-paging feature:
   # export SYSTEMD_PAGER=
   module load cmsh
-  module load rc-base
-  module load slurm
+  #module load rc-base
+  #module load slurm
 
   # Cheaha-master aliases
   alias downhosts='cmsh -c "device status | grep DOWN"'
@@ -244,7 +250,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
 elif [[ "$(hostname -s)" =~ "shealy|login[0-9][0-9]|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
-  module load rc-base
+  #module load rc-base
 elif [[ "$(hostname -s)" =~ "compute" ]]; then # Begin Rocks 5.5 Cheaha config
   #eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
   export PATH="/sbin:/usr/sbin:/share/apps/atlab/sbin:${PATH}"
@@ -356,6 +362,12 @@ case $TERM in
         ;;
 esac
 
+# Fail2ban Aliases
+alias banlist-sshd='sudo ipset list fail2ban-sshd'
+
+# Firewalld Aliases
+alias firewall-rejects='sudo firewall-cmd --direct --get-all-rules'
+
 # nixCraft (on Facebook) calc recipe
 # Usage: calc "10+2"
 #   Pi:  calc "scale=10; 4*a(1)"
@@ -386,11 +398,14 @@ fi
 
 # iTerm2 Shell Integration
 #test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
-${HOME}/isiterm2.sh && test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+#${HOME}/isiterm2.sh && test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Git Stuff
 # Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
 alias gitdiff='git --no-pager diff'
+
+# VI Aliases
+alias viro='vim -Mn'
 
 # https://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
 alias mountpretty='mount |column -t'
@@ -439,7 +454,8 @@ mcd () {
 alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uniq -c | sort -rn | head"
 alias openfiles="cat /proc/sys/fs/file-nr"
 #alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
-alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$16 \"\t\" \$22}' | column -s \$'\t' -t"
+#alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$16 \"\t\" \$22}' | column -s \$'\t' -t"
+alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$9 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$18 \"\t\" \$23}' | column -s \$'\t' -t"
 alias vnclist_count="ps -eo user:25,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | uniq -c | grep -v ' 1 ' | sort -r"
 alias vnclist_cputime="ps -eo etimes:25,time:25,user:25,pid,lstart,cmd --sort=+user | grep Xvnc | grep -v grep | grep -v thinlinc | sort -k1 -r -n | awk '{print \$3 \"\t\" \$4 \"\t\" \$6 \"-\" \$7 \"-\" \$9 \"_\" \$8 \"\t\" \$18 \"\t\" \$24 \"\t\" \$2}' | sort -k6 -n | column -s \$'\t' -t"
 alias sccm_version="grep 'Build number' /var/opt/microsoft/scxcm.log | awk '{print \$4}' | tail -n 1"
