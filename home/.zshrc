@@ -73,6 +73,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 plugins=(zsh-autosuggestions)
+plugins=(zsh-syntax-highlighting)
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -477,6 +478,10 @@ export SHELL=`which zsh`
 # https://access.redhat.com/solutions/2094961
 # disable GTK+ message "Couldn't connect to accessibility bus"
 export NO_AT_BRIDGE=1
+
+# Add highlighters to zsh-syntax-highlighting (default is 'main')
+# https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 
 # Source .zshrc.local to allow for local configuration
 if [ -f $HOME/.zshrc.local ]; then
