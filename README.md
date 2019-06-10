@@ -20,6 +20,12 @@ sudo yum -y install zsh wget curl git
 # Install Oh-my-zsh (http://ohmyz.sh/)
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
+# Install zsh-autosuggestions plugin
+git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+# Install zsh-syntax-highlighting plugin
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+
 # Clone dotfiles and copy some of the config files
 if [ ! -d ~/git/flakrat ]; then
   mkdir -p ~/git/flakrat
