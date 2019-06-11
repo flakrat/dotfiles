@@ -57,6 +57,15 @@ if [ ! -d ~/.config/fontconfig/conf.d ]; then
   mkdir -p ~/.config/fontconfig/conf.d
 fi
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  cd ~/Library/Fonts
+  curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+else
+  cd ~/.local/share/fonts
+  curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+fi
+cd -
+
 if [ ! -d ~/tmp ]; then mkdir ~/tmp; fi
 cd ~/tmp
 hack=Hack-v3.003-ttf.tar.gz
