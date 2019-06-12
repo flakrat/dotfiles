@@ -4,7 +4,8 @@
 # Path to your oh-my-zsh installation.
 export ZSH=${HOME}/.oh-my-zsh
 
-export POWERLEVEL9K_MODE='awesome-fontconfig'
+#export POWERLEVEL9K_MODE='awesome-fontconfig'
+export POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Disable the right prompt, sucks for copy and paste into tickets
 export POWERLEVEL9K_DISABLE_RPROMPT=true
@@ -12,8 +13,10 @@ export POWERLEVEL9K_DISABLE_RPROMPT=true
 # command line into notes / support tickets and the RPROMT doesn't paste well
 #         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 #         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
-#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context time dir vcs)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir virtualenv vcs)
+
+# Set the date format for the prompt to YYYYMMDD format (default is %D{%d.%m.%y})
+POWERLEVEL9K_DATE_FORMAT='%D{%Y%m%d}'
 
 export TERM="xterm-256color"
 
@@ -343,6 +346,19 @@ function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage
 function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
 
+function proclog() {
+  for n in {1..90}; do
+    out=$HOME/log/$(hostname -s)_proclist_$(date +%Y%m%d).log;
+    curday="$(date +%Y%m%d)"
+    while [ $curday -le $(date +%Y%m%d) ]; do 
+      echo "======   $(date)   ======" | tee -a $out;
+      proclist | egrep -v 'gnome-shell|desktop|firefox|slideshow|netdata|polkitd|sftp-server|notty|mhanby|screensaver|mmfsd' | tee -a $out;
+      sleep 60;
+    done;
+    gzip $out;
+  done
+}
+
 #function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
 
 # Set the tab title
@@ -390,9 +406,10 @@ fi
 ## Install 'md5sum' via HomeBrew instead:
 ##   brew install md5sha1sum
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'
-#  alias md5sum='md5 -r'
+  alias python="python3"
+  export PATH=/Users/mhanby/Library/Python/3.7/bin:${PATH}
 fi
 
 # iTerm2 Shell Integration
