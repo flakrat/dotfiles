@@ -4,7 +4,8 @@
 # Path to your oh-my-zsh installation.
 export ZSH=${HOME}/.oh-my-zsh
 
-export POWERLEVEL9K_MODE='awesome-fontconfig'
+#export POWERLEVEL9K_MODE='awesome-fontconfig'
+export POWERLEVEL9K_MODE='nerdfont-complete'
 
 # Disable the right prompt, sucks for copy and paste into tickets
 export POWERLEVEL9K_DISABLE_RPROMPT=true
@@ -13,7 +14,7 @@ export POWERLEVEL9K_DISABLE_RPROMPT=true
 #         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 #         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
 #POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context time dir vcs)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir virtualenv vcs)
 
 export TERM="xterm-256color"
 
@@ -390,9 +391,11 @@ fi
 ## Install 'md5sum' via HomeBrew instead:
 ##   brew install md5sha1sum
 
-if [[ "$(uname)" == "Darwin" ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'
 #  alias md5sum='md5 -r'
+  alias python="python3"
+  export PATH=/Users/mhanby/Library/Python/3.7/bin:${PATH}
 fi
 
 # iTerm2 Shell Integration
@@ -480,6 +483,7 @@ export NO_AT_BRIDGE=1
 # Add highlighters to zsh-syntax-highlighting (default is 'main')
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+ZSH_HIGHLIGHT_MAXLENGTH=20  # If you don't set a sane max length the highlighter will highlight large pastes of text, which is painfully slow
 
 # Source .zshrc.local to allow for local configuration
 if [ -f $HOME/.zshrc.local ]; then
