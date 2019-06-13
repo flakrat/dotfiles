@@ -497,6 +497,7 @@ export NO_AT_BRIDGE=1
 # Add highlighters to zsh-syntax-highlighting (default is 'main')
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+ZSH_HIGHLIGHT_MAXLENGTH=20  # If you don't set a sane max length the highlighter will highlight large pastes of text, which is painfully slow
 
 # Source .zshrc.local to allow for local configuration
 if [ -f $HOME/.zshrc.local ]; then
