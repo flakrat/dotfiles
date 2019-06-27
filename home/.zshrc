@@ -74,7 +74,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git zsh-autosuggestions)  ## Disabled zsh-syntax-highlighting due to poor perfomance when pasting
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -348,9 +348,9 @@ function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
 
 function proclog() {
   for n in {1..90}; do
-    out=$HOME/log/$(hostname -s)_proclist_$(date +%Y%m%d).log;
+    out="$HOME/log/$(hostname -s)_proclist_$(date +%Y%m%d).log"
     curday="$(date +%Y%m%d)"
-    while [ $curday -le $(date +%Y%m%d) ]; do 
+    while [ $(date +%Y%m%d) -le $curday ]; do 
       echo "======   $(date)   ======" | tee -a $out;
       proclist | egrep -v 'gnome-shell|desktop|firefox|slideshow|netdata|polkitd|sftp-server|notty|mhanby|screensaver|mmfsd' | tee -a $out;
       sleep 60;
