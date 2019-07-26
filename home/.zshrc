@@ -412,6 +412,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'
   alias python="python3"
   export PATH=/Users/mhanby/Library/Python/3.7/bin:${PATH}
+  alias speeduptimemachine='sudo sysctl debug.lowpri_throttle_enabled=0'
+  alias slowdowntimemachine='sudo sysctl debug.lowpri_throttle_enabled=1'
 fi
 
 # iTerm2 Shell Integration
