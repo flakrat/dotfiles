@@ -251,6 +251,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   alias reboot_computenodes='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts computenodes -a "/sbin/shutdown -r +1" --one-line'
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
+  export PATH=${PATH}:/usr/lpp/mmfs/bin
 elif [[ "$(hostname -s)" =~ "shealy|login[0-9][0-9]|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   #module load rc-base
 elif [[ "$(hostname -s)" =~ "compute" ]]; then # Begin Rocks 5.5 Cheaha config
@@ -340,6 +341,7 @@ alias virsh-sys="virsh --connect qemu:///system"
 #alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
 #alias proclist='ps auxf | grep -v "0.[0-9]  0"'
 alias proclist='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | egrep -v " 0.[0-9]  0.[0-9] "'
+alias memlist='ps -eo user,pid,ppid,cmd:75,%mem,%cpu --sort=-%mem | head -n 15'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
