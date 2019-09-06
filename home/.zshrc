@@ -361,6 +361,16 @@ function proclog() {
   done
 }
 
+# alias serialnum='sshpass -f /root/.sfa ssh -T user@sfa14k1 "show enc al" | grep "Production serial numb"'
+function serialnum() {
+  echo "SFA14K:"
+  #sshpass -f /root/.sfa ssh -T user@sfa14k1 "show enc al" | grep "Production serial numb"
+  ssh user@sfa14k1 "show enc al" | grep "Production serial numb"
+  echo "SFA12K1 and SFA12K2:"
+  #sshpass -f /root/.sfa ssh -T user@sfa12k1 "show enc al" | grep "Production serial numb"
+  ssh user@sfa12k1 "show enc al" | grep "Production serial numb"
+}
+
 #function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
 
 # Set the tab title
@@ -412,8 +422,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'
   alias python="python3"
   export PATH=/Users/mhanby/Library/Python/3.7/bin:${PATH}
-  alias speeduptimemachine='sudo sysctl debug.lowpri_throttle_enabled=0'
-  alias slowdowntimemachine='sudo sysctl debug.lowpri_throttle_enabled=1'
 fi
 
 # iTerm2 Shell Integration
