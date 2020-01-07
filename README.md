@@ -3,8 +3,9 @@ Beard's GitHub: https://github.com/joshbeard/dotfiles
 
 ## References
   - https://medium.com/@alex285/get-powerlevel9k-the-most-cool-linux-shell-ever-1c38516b0caa
+  - ZSH Plugin Manager: https://github.com/romkatv/powerlevel10k
   - https://github.com/robbyrussell/oh-my-zsh
-  - https://github.com/bhilburn/powerlevel9k
+  - ZSH Theme: https://github.com/romkatv/powerlevel10k
   - https://github.com/ryanoasis/nerd-fonts
   - http://bluejamesbond.github.io/CharacterMap/
   - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
@@ -13,8 +14,7 @@ Beard's GitHub: https://github.com/joshbeard/dotfiles
 TODO: Turn this into an Ansible playbook
 
 ```shell
-# Install zsh and other helper apps 
-not already installed
+# Install zsh and other helper apps not already installed
 sudo yum -y install zsh wget curl git
 
 # Install Zplugin https://github.com/zdharma/zplugin
