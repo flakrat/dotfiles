@@ -2,7 +2,7 @@
 #set -x
 
 # Path to your oh-my-zsh installation.
-export ZSH=${HOME}/.oh-my-zsh
+#export ZSH=${HOME}/.oh-my-zsh
 
 #export POWERLEVEL9K_MODE='awesome-fontconfig'
 export POWERLEVEL9K_MODE='nerdfont-complete'
@@ -13,7 +13,7 @@ export POWERLEVEL9K_DISABLE_RPROMPT=true
 # command line into notes / support tickets and the RPROMT doesn't paste well
 #         POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 #         POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir virtualenv vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir virtualenv vcs newline)
 
 # Set the date format for the prompt to YYYYMMDD format (default is %D{%d.%m.%y})
 POWERLEVEL9K_DATE_FORMAT='%D{%Y%m%d}'
@@ -79,7 +79,7 @@ plugins=(git zsh-autosuggestions)  ## Disabled zsh-syntax-highlighting due to po
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -340,7 +340,8 @@ alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
 #alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
 #alias proclist='ps auxf | grep -v "0.[0-9]  0"'
-alias proclist='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | egrep -v " 0.[0-9]  0.[0-9] "'
+#alias proclist='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | egrep -v " 0.[0-9]  0.[0-9] "'
+alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "'
 alias memlist='ps -eo user,pid,ppid,cmd:75,%mem,%cpu --sort=-%mem | head -n 15'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
@@ -515,3 +516,24 @@ ZSH_HIGHLIGHT_MAXLENGTH=20  # If you don't set a sane max length the highlighter
 if [ -f $HOME/.zshrc.local ]; then
   source $HOME/.zshrc.local
 fi
+
+### Added by Zplugin's installer
+source "$HOME/.zplugin/bin/zplugin.zsh"
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
+### End of Zplugin installer's chunk
+
+zplugin ice wait blockf atpull'zplugin creinstall -q .'
+zplugin light zsh-users/zsh-completions
+
+zplugin ice wait atinit"zpcompinit; zpcdreplay"
+zplugin light zdharma/fast-syntax-highlighting
+
+zplugin ice wait atload"_zsh_autosuggest_start"
+zplugin light zsh-users/zsh-autosuggestions
+
+# Load a theme
+PS1="READY >" # provide a nice prompt till the theme loads
+zplugin ice wait'!' lucid
+zplugin ice depth=1; zplugin light romkatv/powerlevel10k
+
