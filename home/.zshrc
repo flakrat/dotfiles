@@ -110,7 +110,7 @@ setopt interactivecomments
 #   or a space, ^ , etc... by overriding builting func zshaddhistory()
 function zshaddhistory() {
   emulate -L zsh
-  if ! [[ "$1" =~ "(^#|^ |^ykchalresp|--password)" ]] ; then
+  if ! [[ "$1" =~ "(^#\s+|^\s+#|^ |^ykchalresp|--password)" ]] ; then
       print -sr -- "${1%%$'\n'}"
       fc -p
   else
