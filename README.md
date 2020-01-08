@@ -2,13 +2,14 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh
 Beard's GitHub: https://github.com/joshbeard/dotfiles
 
 ## References
-  - https://medium.com/@alex285/get-powerlevel9k-the-most-cool-linux-shell-ever-1c38516b0caa
-  - ZSH Plugin Manager: https://github.com/romkatv/powerlevel10k
-  - https://github.com/robbyrussell/oh-my-zsh
+  - ZSH Plugin Manager: https://github.com/zdharma/zplugin
   - ZSH Theme: https://github.com/romkatv/powerlevel10k
-  - https://github.com/ryanoasis/nerd-fonts
-  - http://bluejamesbond.github.io/CharacterMap/
-  - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
+  - Nerd Fonts: https://github.com/ryanoasis/nerd-fonts
+  - Other
+    - Oh-My-Zsh: https://github.com/robbyrussell/oh-my-zsh
+    - https://medium.com/@alex285/get-powerlevel9k-the-most-cool-linux-shell-ever-1c38516b0caa
+    - http://bluejamesbond.github.io/CharacterMap/
+    - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 
 ## Quick Install
 TODO: Turn this into an Ansible playbook
