@@ -99,6 +99,25 @@ fi
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
+# https://stackoverflow.com/questions/11670935/comments-in-command-line-zsh
+# Allow comments on the command line, without this you'll get errors like:
+## $ #this is a comment
+##   zsh: command not found: #this
+setopt interactivecomments
+
+# https://superuser.com/questions/352788/how-to-prevent-a-command-in-the-zshell-from-being-saved-into-history
+# Don't log certain commands to history file (lines that start with a comment, ^#,
+#   or a space, ^ , etc... by overriding builting func zshaddhistory()
+function zshaddhistory() {
+  emulate -L zsh
+  if ! [[ "$1" =~ "(^#|^ |^ykchalresp|--password)" ]] ; then
+      print -sr -- "${1%%$'\n'}"
+      fc -p
+  else
+      return 1
+  fi
+}
+
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
