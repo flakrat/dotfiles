@@ -25,15 +25,7 @@ export TERM="xterm-256color"
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="robbyrussell"
-#ZSH_THEME="bureau-flakrat"
-#ZSH_THEME="xiong-chiamiov"
-#ZSH_THEME="cobalt2-flakrat"
-#ZSH_THEME="agnoster-flakrat"
-#ZSH_THEME="powerlevel9k/powerlevel9k-flakrat"
-ZSH_THEME="powerlevel9k/powerlevel9k"
-#ZSH_THEME="ys"
-#ZSH_THEME="wezm+"
-#ZSH_THEME="nanotech-flakrat"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -116,6 +108,8 @@ elif [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
 else
   HISTFILE="$HOME/.zsh_history_${srvr}"
 fi
+
+alias history="history 1"         # default history only displays last 16 entries
 HISTCONTROL=ignoredups:erasedups  # no duplicate entries
 HISTSIZE=SAVEHIST=100000          # big big history
 HISTFILESIZE=100000               # big big history
@@ -338,9 +332,6 @@ alias igrep="grep -i"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
-#alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
-#alias proclist='ps auxf | grep -v "0.[0-9]  0"'
-#alias proclist='ps -eo user,pid,ppid,pcpu,pmem,nlwp,psr,start_time,etime,stat,wchan:14,cmd --sort=-pcpu,-pmem,-nlwp | egrep -v " 0.[0-9]  0.[0-9] "'
 alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "'
 alias memlist='ps -eo user,pid,ppid,cmd:75,%mem,%cpu --sort=-%mem | head -n 15'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
@@ -362,17 +353,14 @@ function proclog() {
   done
 }
 
-# alias serialnum='sshpass -f /root/.sfa ssh -T user@sfa14k1 "show enc al" | grep "Production serial numb"'
+# Retrieve serial numbers for the DDN SFA controllers
 function serialnum() {
-  echo "SFA14K:"
-  #sshpass -f /root/.sfa ssh -T user@sfa14k1 "show enc al" | grep "Production serial numb"
-  ssh user@sfa14k1 "show enc al" | grep "Production serial numb"
-  echo "SFA12K1 and SFA12K2:"
-  #sshpass -f /root/.sfa ssh -T user@sfa12k1 "show enc al" | grep "Production serial numb"
-  ssh user@sfa12k1 "show enc al" | grep "Production serial numb"
+  echo "SFA1:"
+  ssh user@sfa1 "show enc al" | grep "Production serial numb"
+  echo "SFA2:"
+  ssh user@sfa2 "show enc al" | grep "Production serial numb"
 }
 
-#function blazerid_query() { blazerid_query.rb --username $1 | egrep -i -A1 "displayname|uabemployeedepartment|mail|uid|eduPersonPrimaryAffiliation:"; }
 
 # Set the tab title
 # http://tldp.org/HOWTO/Xterm-Title-4.html
@@ -441,8 +429,6 @@ alias mountpretty='mount |column -t'
 alias datepretty='date +"%Y%m%d_%H%M%S"'
 alias ports='netstat -tulanp'
 #alias wakeupnas01='/usr/bin/wakeonlan 00:11:32:11:15:FC'
-#alias wakeupnas02='/usr/bin/wakeonlan 00:11:32:11:15:FD'
-#alias wakeupnas03='/usr/bin/wakeonlan 00:11:32:11:15:FE'
 alias iptlist='sudo /sbin/iptables -L -n -v --line-numbers'
 alias iptlistin='sudo /sbin/iptables -L INPUT -n -v --line-numbers'
 alias iptlistout='sudo /sbin/iptables -L OUTPUT -n -v --line-numbers'
@@ -465,9 +451,6 @@ alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 ## Get server cpu info ##
 alias cpuinfo='lscpu'
 
-## older system use /proc/cpuinfo ##
-##alias cpuinfo='less /proc/cpuinfo' ##
-
 ## get GPU ram on desktop / laptop##
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## grep without comments
@@ -482,8 +465,6 @@ mcd () {
 }
 alias filehogs="sudo lsof -w | awk '{ print \$2 \"\\t\" \$1; }' | sort -rn | uniq -c | sort -rn | head"
 alias openfiles="cat /proc/sys/fs/file-nr"
-#alias vnclist="ps auxf| grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$25}' | sort"
-#alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$16 \"\t\" \$22}' | column -s \$'\t' -t"
 alias vnclist="ps -eo user:25,pid,lstart,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1 \"\t\" \$9 \"\t\" \$2 \"\t\" \$4 \"-\" \$5 \"-\" \$7 \"_\" \$6 \"\t\" \$18 \"\t\" \$23}' | column -s \$'\t' -t"
 alias vnclist_count="ps -eo user:25,cmd --sort=user | grep Xvnc | grep -v grep | grep -v thinlinc | awk '{print \$1}' | uniq -c | grep -v ' 1 ' | sort -r"
 alias vnclist_cputime="ps -eo etimes:25,time:25,user:25,pid,lstart,cmd --sort=+user | grep Xvnc | grep -v grep | grep -v thinlinc | sort -k1 -r -n | awk '{print \$3 \"\t\" \$4 \"\t\" \$6 \"-\" \$7 \"-\" \$9 \"_\" \$8 \"\t\" \$18 \"\t\" \$24 \"\t\" \$2}' | sort -k6 -n | column -s \$'\t' -t"
