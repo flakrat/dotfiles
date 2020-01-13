@@ -18,6 +18,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon status context date time dir virtuale
 # Set the date format for the prompt to YYYYMMDD format (default is %D{%d.%m.%y})
 POWERLEVEL9K_DATE_FORMAT='%D{%Y%m%d}'
 
+export TERMINFO="/usr/share/terminfo"
 export TERM="xterm-256color"
 
 # Set name of the theme to load.
@@ -537,3 +538,5 @@ PS1="READY >" # provide a nice prompt till the theme loads
 zplugin ice wait'!' lucid
 zplugin ice depth=1; zplugin light romkatv/powerlevel10k
 
+# Enable case insensitive tab completion of file names
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
