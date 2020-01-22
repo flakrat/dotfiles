@@ -1,8 +1,7 @@
-Dotfiles that I share amongst my workstations (idea and some content from Josh
-Beard's GitHub: https://github.com/joshbeard/dotfiles
+Dotfiles that I share amongst my workstations (idea and some content from Josh Beard's GitHub: https://github.com/joshbeard/dotfiles)
 
 ## References
-  - ZSH Plugin Manager: https://github.com/zdharma/zplugin
+  - ZSH Plugin Manager: https://github.com/zdharma/zinit
   - ZSH Theme: https://github.com/romkatv/powerlevel10k
   - Nerd Fonts: https://github.com/ryanoasis/nerd-fonts
   - Other
@@ -18,8 +17,8 @@ TODO: Turn this into an Ansible playbook
 # Install zsh and other helper apps not already installed
 sudo yum -y install zsh wget curl git
 
-# Install Zplugin https://github.com/zdharma/zplugin
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
+# Install Zinit https://github.com/zdharma/zplugin
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
 # Clone dotfiles and copy some of the config files
 if [ ! -d ~/git/flakrat ]; then
