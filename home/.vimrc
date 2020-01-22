@@ -49,11 +49,13 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 
 " sexy color theme
-Plugin 'joshbeard/vim-kolor'
+"Plugin 'koturn/vim-kolor'
+
 " a light colorscheme
 Plugin 'Pychimp/vim-sol'
 " light/pleasant colorscheme
 Plugin 'jnurmine/Zenburn'
+
 " https://github.com/morhetz/gruvbox/wiki/Installation
 Plugin 'morhetz/gruvbox'
 
@@ -133,7 +135,7 @@ set t_Co=256
 """MJH"""" " autocmd vimenter * if !argc() | NERDTree | endif
 
 " colorscheme
-color kolor
+" color kolor
 syn on
 
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
@@ -222,5 +224,6 @@ map <Leader>s :Gstatus<CR>
 map <Leader>c :Gcommit<CR>
 
 "color codeschool
-color gruvbox
+"color gruvbox
+colorscheme gruvbox
 set background=dark
