@@ -518,25 +518,34 @@ if [ -f $HOME/.zshrc.local ]; then
   source $HOME/.zshrc.local
 fi
 
-### Added by Zplugin's installer
-source "$HOME/.zplugin/bin/zplugin.zsh"
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-### End of Zplugin installer's chunk
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
+    command mkdir -p $HOME/.zinit
+    command git clone https://github.com/zdharma/zinit $HOME/.zinit/bin && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f"
+fi
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit installer's chunk
 
-zplugin ice wait blockf atpull'zplugin creinstall -q .'
-zplugin light zsh-users/zsh-completions
+zinit ice wait blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
 
-zplugin ice wait atinit"zpcompinit; zpcdreplay"
-zplugin light zdharma/fast-syntax-highlighting
+zinit ice wait atinit"zpcompinit; zpcdreplay"
+zinit light zdharma/fast-syntax-highlighting
 
-zplugin ice wait atload"_zsh_autosuggest_start"
-zplugin light zsh-users/zsh-autosuggestions
+zinit ice wait atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
 
 # Load a theme
 PS1="READY >" # provide a nice prompt till the theme loads
-zplugin ice wait'!' lucid
-zplugin ice depth=1; zplugin light romkatv/powerlevel10k
+zinit ice wait'!' lucid
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+# Use PowerLevel9k theme when running ZSH version -le 5.0
+#zinit ice depth=1; zinit light Powerlevel9k/powerlevel9k
 
 # Enable case insensitive tab completion of file names
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
