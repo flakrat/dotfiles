@@ -22,8 +22,13 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/i
 
 # Clone dotfiles and copy some of the config files
 if [ ! -d ~/git/flakrat ]; then
-  mkdir -p ~/git/flakrat
+  mkdir -p ~/git/{flakrat,samoshkin}
 fi
+
+# Install tmux-config
+cd ~/git/samoshkin
+git clone https://github.com/samoshkin/tmux-config.git
+./tmux-config/install.sh
 
 cd ~/git/flakrat
 
