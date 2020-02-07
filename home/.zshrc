@@ -532,20 +532,33 @@ autoload -Uz _zinit
 ### End of Zinit installer's chunk
 
 zinit ice wait blockf atpull'zinit creinstall -q .'
-zinit light zsh-users/zsh-completions
 
-zinit ice wait atinit"zpcompinit; zpcdreplay"
+# Regular plugins loaded without tracking.
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
+# Plugin history-search-multi-word loaded with tracking.
+zinit load zdharma/history-search-multi-word
+
+# Binary release in archive, from GitHub-releases page.
+# After automatic unpacking it provides program "fzf".
+zinit ice from"gh-r" as"program"
+zinit load junegunn/fzf-bin
+
+zinit ice wait atinit"zpcompinit; zpcdreplay"
+
 zinit ice wait atload"_zsh_autosuggest_start"
-zinit light zsh-users/zsh-autosuggestions
 
 # Load a theme
 PS1="READY >" # provide a nice prompt till the theme loads
 zinit ice wait'!' lucid
-zinit ice depth=1; zinit light romkatv/powerlevel10k
-# Use PowerLevel9k theme when running ZSH version -le 5.0
-#zinit ice depth=1; zinit light Powerlevel9k/powerlevel9k
+if is-at-least 5.1; then
+  zinit ice depth=1; zinit light romkatv/powerlevel10k
+else
+  # Use PowerLevel9k theme when running ZSH version -le 5.0
+  zinit ice depth=1; zinit light Powerlevel9k/powerlevel9k
+fi
 
 # Enable case insensitive tab completion of file names
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
