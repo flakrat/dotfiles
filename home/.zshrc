@@ -429,8 +429,9 @@ fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'
-  alias python="python3"
-  export PATH=/Users/mhanby/Library/Python/3.7/bin:${PATH}
+  #alias python="python3"
+  export DYLD_LIBRARY_PATH=/usr/local/opt/openssl/lib:$DYLD_LIBRARY_PATH
+  export PATH=/usr/local/opt/python/libexec/bin:/Users/mhanby/Library/Python/3.7/bin:${PATH}
 fi
 
 # iTerm2 Shell Integration
