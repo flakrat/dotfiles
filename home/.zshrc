@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Enable DEBUG
 #set -x
 
@@ -563,6 +570,8 @@ PS1="READY >" # provide a nice prompt till the theme loads
 zinit ice wait'!' lucid
 if is-at-least 5.1; then
   zinit ice depth=1; zinit light romkatv/powerlevel10k
+  # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 else
   # Use PowerLevel9k theme when running ZSH version -le 5.0
   zinit ice depth=1; zinit light Powerlevel9k/powerlevel9k
@@ -570,3 +579,4 @@ fi
 
 # Enable case insensitive tab completion of file names
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
