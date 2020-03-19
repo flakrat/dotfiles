@@ -21,9 +21,8 @@ sudo yum -y install zsh wget curl git
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
 
 # Clone dotfiles and copy some of the config files
-if [ ! -d ~/git/flakrat ]; then
-  mkdir -p ~/git/{flakrat,samoshkin}
-fi
+if [ ! -d ~/git/flakrat ]; then mkdir -p ~/git/flakrat; fi
+if [ ! -d ~/git/samoshkin ]; then mkdir -p ~/git/samoshkin; fi
 
 # Install tmux-config
 cd ~/git/samoshkin
@@ -42,12 +41,8 @@ cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 #
-if [ ! -d ~/.local/share/fonts ]; then
-  mkdir -p ~/.local/share/fonts
-fi
-if [ ! -d ~/.config/fontconfig/conf.d ]; then
-  mkdir -p ~/.config/fontconfig/conf.d
-fi
+if [ ! -d ~/.local/share/fonts ]; then mkdir -p ~/.local/share/fonts; fi
+if [ ! -d ~/.config/fontconfig/conf.d ]; then mkdir -p ~/.config/fontconfig/conf.d; fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   cd ~/Library/Fonts
