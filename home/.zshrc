@@ -201,6 +201,8 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
 #      /bin/bash $script
 #    fi
 #  }
+  alias slurm_top_running='squeue --state running | grep -v PARTIT | awk "{print \$4}" | sort | uniq -c | sort -n -r | head -n 10'
+  alias slurm_top_pending='squeue --state pending | grep -v PARTIT | awk "{print \$4}" | sort | uniq -c | sort -n -r | head -n 10'
   alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
   alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
@@ -579,4 +581,3 @@ fi
 
 # Enable case insensitive tab completion of file names
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
-
