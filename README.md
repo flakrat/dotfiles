@@ -36,7 +36,7 @@ git clone https://github.com/flakrat/dotfiles.git
 # Copy some of the config files
 cd ~/git/flakrat/dotfiles/home
 cp -a .vim ~/
-cp -a .zsh* .iterm2* .vimrc .tmux.conf  ~/
+cp -a .zsh* .p10k.zsh .iterm2* .vimrc .tmux.conf  ~/
 cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
