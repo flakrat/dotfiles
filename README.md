@@ -19,7 +19,7 @@ sudo yum -y install zsh wget curl git
 
 # Install Zinit https://github.com/zdharma/zplugin
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
-source ~/.zshrc
+zsh
 zinit self-update
 
 # Clone dotfiles and copy some of the config files
