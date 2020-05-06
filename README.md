@@ -39,6 +39,7 @@ git clone https://github.com/flakrat/dotfiles.git
 cd ~/git/flakrat/dotfiles/home
 cp -a .vim ~/
 cp -a .zsh* .p10k.zsh .iterm2* .vimrc .tmux.conf  ~/
+touch ~/.tmux.conf.local
 cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
