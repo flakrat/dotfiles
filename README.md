@@ -32,7 +32,6 @@ git clone https://github.com/samoshkin/tmux-config.git
 ./tmux-config/install.sh
 
 cd ~/git/flakrat
-
 git clone https://github.com/flakrat/dotfiles.git
 
 # Copy some of the config files
@@ -40,29 +39,16 @@ cd ~/git/flakrat/dotfiles/home
 cp -a .vim ~/
 cp -a .zsh* .p10k.zsh .iterm2* .vimrc .tmux.conf  ~/
 touch ~/.tmux.conf.local
-cp -a isiterm2.sh ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
 #
 if [ ! -d ~/.local/share/fonts ]; then mkdir -p ~/.local/share/fonts; fi
 if [ ! -d ~/.config/fontconfig/conf.d ]; then mkdir -p ~/.config/fontconfig/conf.d; fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  cd ~/Library/Fonts
-else
-  cd ~/.local/share/fonts
-fi
-curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
-curl -fLo "MesloLGS NF Regular.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-curl -fLo "MesloLGS NF Bold.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-curl -fLo "MesloLGS NF Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-curl -fLo "MesloLGS NF Bold Italic.ttf" https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-cd -
-
 if [ ! -d ~/tmp ]; then mkdir ~/tmp; fi
 cd ~/tmp
 hack=Hack-v3.003-ttf.tar.gz
-wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.tar.gz
+wget https://github.com/source-foundry/Hack/releases/download/v3.003/$hack
 if [ -d ~/tmp/ttf ]; then rm -rf ~/tmp/ttf; fi
 tar -zxf $hack
 cp -a ttf/Hack*.ttf ~/.local/share/fonts/
@@ -70,15 +56,6 @@ cd ~/.config/fontconfig/conf.d/
 curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/10-nerd-font-symbols.conf
 fc-cache -f -v
 unset hack
-
-# Install Powerline Fonts to support flakrat/tmux-config
-# https://powerline.readthedocs.io/en/latest/installation/linux.html
-cd ~/tmp
-wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-mv PowerlineSymbols.otf ~/.local/share/fonts/
-fc-cache -vf ~/.local/share/fonts/
-mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d/
 
 # Install Vim bundles
 mkdir -p ~/.vim/bundle
