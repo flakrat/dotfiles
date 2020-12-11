@@ -155,7 +155,7 @@ setopt extendedhistory
 bindkey -v
 
 # https://dougblack.io/words/zsh-vi-mode.html
-# By default, there is a 0.4 second delay after you hit the <ESC> key and when the mode change is registered. 
+# By default, there is a 0.4 second delay after you hit the <ESC> key and when the mode change is registered.
 # This results in a very jarring and frustrating transition between modes. Let's reduce this delay to 0.1 seconds
 export KEYTIMEOUT=1
 
@@ -177,6 +177,14 @@ alias servicetag="/opt/dell/srvadmin/bin/omreport chassis info | grep 'Service T
 
 # All cluster nodes
 if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
+  function cheaha_user_lookup() {
+    ldapsearch -LLL -x  -h ldapserver -b 'dc=cm,dc=cluster' uid=$1 cn mail | grep -v ^dn | awk -F: '{print $2}' | sed -e 's/^ //';
+  }
+
+  function cheaha_user_lookup_full() {
+    ldapsearch -LLL -x  -h ldapserver -b 'dc=cm,dc=cluster' uid=$1;
+  }
+
   ## Begin GPFS
   alias mmlsquota_scratch='mmlsquota -v -j scratch BigGreen --block-size=auto'
   alias mmlsquota_user='mmlsquota -u $USER BigGreen:user --block-size=auto'
@@ -236,6 +244,14 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias squeue_jobendtime='squeue --format "%.10i %.12u %e"'
   alias squeue_jobruntime='squeue --format "%.10i %.12u %M"'
   alias squeue_jobtimeleft='squeue --format "%.10i %.12u %L"'
+  alias squeue_pending="squeue --state pending --array --noheader | awk '{print \$4}' | sort | uniq -c  | sort -n"
+  alias squeue_running="squeue --state running --array --noheader | awk '{print \$4}' | sort | uniq -c  | sort -n"
+  function sinfo_nodemem() {
+    for node in $(scontrol show node | grep NodeName | awk '{print $1}' | awk -F= '{print $2}'); do
+      scontrol show node $node | egrep 'NodeName|RealMemory' | awk '{print $1}' | tr '\n' '\t';
+      echo;
+    done
+  }
   #alias squeue_full='squeue --format "%.18i %.9P %.8j %.8u %.8C %.8t %.8b %.10M %.12l %.12L %.6D %.35Z %R"'
   ## End Slurm aliases
 
@@ -275,6 +291,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
 
   export PATH=${PATH}:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin:/root/bin
   export PATH=${PATH}:/usr/lpp/mmfs/bin
+  export PATH=${PATH}:/share/apps/rc/sbin
 elif [[ "$(hostname -s)" =~ "shealy|login[0-9][0-9]|c[0-9][0-9][0-9][0-9]" ]]; then # BrightCM Compute Nodes
   #module load rc-base
 elif [[ "$(hostname -s)" =~ "compute" ]]; then # Begin Rocks 5.5 Cheaha config
@@ -373,7 +390,7 @@ function proclog() {
   for n in {1..90}; do
     out="$HOME/log/$(hostname -s)_proclist_$(date +%Y%m%d).log"
     curday="$(date +%Y%m%d)"
-    while [ $(date +%Y%m%d) -le $curday ]; do 
+    while [ $(date +%Y%m%d) -le $curday ]; do
       echo "======   $(date)   ======" | tee -a $out;
       proclist | egrep -v 'gnome-shell|desktop|firefox|slideshow|netdata|polkitd|sftp-server|notty|mhanby|screensaver|mmfsd' | tee -a $out;
       sleep 60;
@@ -412,6 +429,9 @@ alias banlist-sshd='sudo ipset list fail2ban-sshd'
 
 # Firewalld Aliases
 alias firewall-rejects='sudo firewall-cmd --direct --get-all-rules'
+
+# Failed SSH login attempts on RHEL/CENTOS
+alias failed_ssh='journalctl _SYSTEMD_UNIT=sshd.service  --reverse --no-tail | grep -i fail'
 
 # nixCraft (on Facebook) calc recipe
 # Usage: calc "10+2"
@@ -581,3 +601,4 @@ fi
 
 # Enable case insensitive tab completion of file names
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
