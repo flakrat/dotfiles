@@ -228,7 +228,7 @@ alias igrep="grep -i"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
-alias proclist='ps auxf | head -n 1 && ps auxf | grep -v "0.[0-9]  0"'
+alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  [0-9].[0-9]  [0-1].[0-9] "'
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage

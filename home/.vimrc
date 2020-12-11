@@ -30,23 +30,11 @@ Plugin 'gmarik/Vundle.vim'
 " Powerline fonts
 Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
-" VIM Puppet plugin - https://github.com/rodjek/vim-puppet
-Plugin 'rodjek/vim-puppet'
-
 " Tabular - https://github.com/godlygeek/tabular
 " Sometimes, it's useful to line up text. Naturally, it's nicer to have the
 " computer do this for you, since aligning things by hand quickly becomes
 " unpleasant.
 Plugin 'godlygeek/tabular'
-
-" syntastic - https://github.com/scrooloose/syntastic
-" Syntastic is a syntax checking plugin for Vim that runs files through
-" external syntax checkers and displays any resulting errors to the user. This
-" can be done on demand, or automatically as files are saved.
-Plugin 'scrooloose/syntastic'
-
-" File browser - https://github.com/scrooloose/nerdtree
-Plugin 'scrooloose/nerdtree'
 
 " sexy color theme
 "Plugin 'koturn/vim-kolor'
