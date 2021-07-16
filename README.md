@@ -4,14 +4,18 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
   - ZSH Plugin Manager: https://github.com/zdharma/zinit
   - ZSH Theme: https://github.com/romkatv/powerlevel10k
   - Nerd Fonts: https://github.com/ryanoasis/nerd-fonts
-  - Other
-    - Oh-My-Zsh: https://github.com/robbyrussell/oh-my-zsh
-    - https://medium.com/@alex285/get-powerlevel9k-the-most-cool-linux-shell-ever-1c38516b0caa
-    - http://bluejamesbond.github.io/CharacterMap/
     - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
+  - Tmux Config: https://github.com/gpakosz/.tmux
+  - Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
+  - Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
+  - Neovim / Nvim: https://github.com/neovim/neovim
+    - Tokyo Night theme: https://github.com/folke/tokyonight.nvim
+  - vim-plug: https://github.com/junegunn/vim-plug
 
 ## Quick Install
 TODO: Turn this into an Ansible playbook
+
+Install the latest release of Neovim from: https://github.com/neovim/neovim/releases/tag/stable
 
 ```shell
 # Install zsh and other helper apps not already installed
@@ -24,24 +28,20 @@ zinit self-update
 
 # Clone dotfiles and copy some of the config files
 if [ ! -d ~/git/flakrat ]; then mkdir -p ~/git/flakrat; fi
-if [ ! -d ~/git/samoshkin ]; then mkdir -p ~/git/samoshkin; fi
 
-# Install tmux-config
-cd ~/git/samoshkin
-git clone https://github.com/samoshkin/tmux-config.git
-./tmux-config/install.sh
+# Install gpakosz/.tmux
+cd ~
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
 
 cd ~/git/flakrat
 git clone https://github.com/flakrat/dotfiles.git
 
 # Copy some of the config files
 cd ~/git/flakrat/dotfiles/home
-cp -a .vim ~/
-cp -a .zsh* .p10k.zsh .iterm2* .vimrc .tmux.conf  ~/
-touch ~/.tmux.conf.local
+cp -a .zsh* .vimrc .tmux.conf.local  ~/
 
 # Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
-#
 if [ ! -d ~/.local/share/fonts ]; then mkdir -p ~/.local/share/fonts; fi
 if [ ! -d ~/.config/fontconfig/conf.d ]; then mkdir -p ~/.config/fontconfig/conf.d; fi
 
@@ -57,28 +57,8 @@ curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasi
 fc-cache -f -v
 unset hack
 
-# Install Vim bundles
-mkdir -p ~/.vim/bundle
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-vim -c ":PluginInstall"
-```
-
-## Gnome Terminal
-```shell
-# If running in Gnome Terminal, set the default profile font to Powerline and background color
-if [ ${VTE_VERSION+x} ]; then
-  profile="$(gconftool-2 --get /apps/gnome-terminal/global/default_profile)"
-
-  oldbkcolor="$(gconftool-2 --get /apps/gnome-terminal/profiles/${profile}/background_color)"
-  newbkcolor='#00002B2B3636'
-  echo "Changing gnome-terminal ${profile} profile background_color from '$oldbkcolor' to '$newbkcolor'"
-  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/background_color --type string "$newbkcolor"
-
-  oldfont="$(gconftool-2 --get /apps/gnome-terminal/profiles/${profile}/font)"
-  newfont="Meslo LG M DZ for Powerline 8"
-
-  echo "Changing gnome-terminal ${profile} profile font from: '$oldfont' to '$newfont'"
-  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/use_system_font --type bool false
-  gconftool-2 --set /apps/gnome-terminal/profiles/${profile}/font --type string "$newfont"
-fi
+# Install vim-plug
+cd ~
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
