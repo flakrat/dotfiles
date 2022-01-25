@@ -1,61 +1,69 @@
 # ~/.config/starship.toml
 
-format = '$battery$all'
-right_format = '$character$custom$username$hostname$time'
-scan_timeout = 10
-add_newline = false
+add_newline = true
+
+format = """$username$directory$git_branch$git_commit$git_state$git_status$fill$java$php$dart$time$cmd_duration$character$line_break> """
+
+[line_break]
+disabled = false
 
 [character]
-format = '$symbol'
-success_symbol = '[❯](bold green)'
-error_symbol = '[❯](bold red)'
-vicmd_symbol = '[❮](bold green bg:blue)'
-disabled = false
+success_symbol = "[](fg:green)[ OK ](bg:green fg:#0F111A)"
+error_symbol = "[](fg:red)[ ERROR ](bg:red fg:#0F111A)"
+format = "$symbol"
 
 [cmd_duration]
-min_time = 2000
-format = 'took [$duration]($style) '
-style = 'yellow bold'
-show_milliseconds = false
-disabled = false
-show_notifications = false
-min_time_to_notify = 45000
-
-[fill]
-style = 'dimmed #565a6e'
-symbol = '─'
-disabled = false
+min_time = 0
+format = "[](fg:#CFB300)[ took $duration ](bg:#CFB300 fg:#0F111A)[](bg:#CFB300 fg:#0F111A)"
 
 [time]
-format = '[$time]($style)'
-time_format = '%F %T'
-style = 'bold dimmed fg:black bg:white'
-use_12hr = false
 disabled = false
-utc_time_offset = 'local'
-time_range = '-'
+format = "[](fg:#252A40)[ $time ](bg:#252A40 fg:bold white)[](bg:#252A40 fg:#0F111A)"
 
 [username]
-format = '[$user]($style)'
-style_root = 'bold fg:red bg:#565f89'
-style_user = 'bold fg:yellow bg:#565f89'
-#show_always = false
-disabled = false
-
-[hostname]
-format = '[@$hostname]($style)'
-style = 'bold fg:yellow bg:#565f89'
+show_always = true
+format = "[ $user ](bg:#252A40 fg:bold white)[](fg:#252A40)"
 
 [directory]
-read_only = '🔒'
-read_only_style = 'red'
-style = 'bold dimmed fg:#7aa2f7'
+truncation_symbol = ".../"
+truncation_length = 3
+truncate_to_repo = false
+format = "[](fg:#0F111A bg:#252A40)[ $path ](bg:#252A40 fg:bold white)[](fg:#252A40)"
 
-[battery]
-full_symbol = "🔋 "
-charging_symbol = "⚡️ "
+[directory.substitutions]
+"/" = "  "
 
-[[battery.display]]
-threshold = 20
-style = "bold red"
+[git_branch]
+format = "[](fg:#0F111A bg:#252A40)[  $branch](bg:#252A40 fg:bold green)"
+
+[git_commit]
+only_detached = false
+format = "[ \\($hash\\) ](bg:#252A40 fg:bold green)"
+
+[git_status]
+ahead = "⇡$count "
+behind = "⇣$count "
+untracked = "?$count "
+stashed = "$$count "
+modified = "!$count "
+staged = "+$count "
+renamed = "»$count "
+deleted = "x$count "
+conflicted = "=$count "
+diverged = "⇕$count "
+format = "[$all_status$ahead_behind ](bg:#252A40 fg:bold green)[](fg:#252A40)"
+
+[git_state]
+disabled = false
+format = "[ \\[$state\\($progress_current/$progress_total\\)\\] ](bg:#252A40 fg:bold white)"
+
+[java]
+format = "[](fg:#5F4331)[ Java $version ](fg:bold white bg:#5F4331)[](bg:#5F4331 fg:#0F111A)"
+
+[php]
+format = "[](fg:#4F4789)[ PHP $version ](fg:bold white bg:#4F4789)[](bg:#4F4789 fg:#0F111A)"
+
+[dart]
+disabled = true
+format = "[](fg:#04599C)[ Dart $version ](fg:bold white bg:#04599C)[](bg:#04599C fg:#0F111A)"
 
