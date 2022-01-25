@@ -1,0 +1,81 @@
+export EDITOR=`which vim`
+
+function mgrep () {
+  grep $1 ~/.zsh_history_cheaha_master.mhanby
+}
+
+# http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
+srvr=`hostname -s`
+if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
+  HISTFILE="$HOME/.zsh_history_cheaha_compute"
+elif [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
+  HISTFILE="$HOME/.zsh_history_cheaha_master"
+else
+  HISTFILE="$HOME/.zsh_history_${srvr}"
+fi
+
+# Hightlight pattern in command output (unlike grep that only returns the matches)
+# http://unix.stackexchange.com/questions/366/convince-grep-to-output-all-lines-not-just-those-with-matches
+# Ex: /usr/bin/rbd --help | highlight showmapped
+highlight () {
+  perl -pe "s/$1/\e[1;31;43m$&\e[0m/g"
+}
+ihighlight () {
+  perl -pe "s/$1/\e[1;31;43m$&\e[0m/ig"
+}
+
+
+# Host agnostic alias and functions
+alias histall="history -i 1"
+alias igrep="grep -i"
+alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
+alias vmlist="virsh --connect qemu:///system list"
+alias virsh-sys="virsh --connect qemu:///system"
+alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "'
+alias memlist='ps -eo user,pid,ppid,cmd:75,%mem,%cpu --sort=-%mem | head -n 15'
+alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
+function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
+function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
+# Sort processes by top virtmem usage
+function proc-by-virtmem() { ps -e -o pid,vsz,comm= | sort -r -n -k 2; }
+
+# nixCraft (on Facebook) calc recipe
+# Usage: calc "10+2"
+#   Pi:  calc "scale=10; 4*a(1)"
+# Temperature: calc "30 * 1.8 + 32"
+#              calc "(86 - 32)/1.8"
+calc_full() { echo "$*" | bc -l; }
+calc() { echo "scale=2; $*" | bc -l; }
+
+# Git Stuff
+# Don't use the pager for 'git diff', i.e. dump it all out to the terminal at once
+alias gitdiff='git --no-pager diff'
+
+# VI Aliases
+# Open file in readonly and no swap
+alias viro='vim -Mn'
+# Open vim without reading .vimrc, much faster (not so be confused with
+# vim.tiny binary, which still sources .vimrc
+alias vimtiny='vim -u NONE'
+
+## grep without comments
+alias nocomment='grep -Ev '\''^(#|$|;)'\'''
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias md5='md5 -r'
+  export DYLD_LIBRARY_PATH=/usr/local/opt/openssl/lib:$DYLD_LIBRARY_PATH
+  export PATH=/usr/local/opt/python/libexec/bin:$HOME/Library/Python/3.7/bin:${PATH}
+  if [ -f /usr/local/bin/nvim ]; then alias vim="/usr/local/bin/nvim"; fi
+elif [ -f ~/.local/bin/nvim ]; then
+  alias vim="~/.local/bin/nvim";
+elif [ -f ~/.local/bin/nvim.appimage ]; then
+  alias vim="~/.local/bin/nvim.appimage";
+elif [ -f /usr/local/bin/nvim ]; then
+  alias vim="/usr/local/bin/nvim";
+fi
+
+if [ -f $HOME/.zshrc.local.cheaha ]; then
+  source $HOME/.zshrc.local.cheaha
+fi
+
+
