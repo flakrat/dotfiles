@@ -1,0 +1,61 @@
+# ~/.config/starship.toml
+
+format = '$battery$all'
+right_format = '$character$custom$username$hostname$time'
+scan_timeout = 10
+add_newline = false
+
+[character]
+format = '$symbol'
+success_symbol = '[❯](bold green)'
+error_symbol = '[❯](bold red)'
+vicmd_symbol = '[❮](bold green bg:blue)'
+disabled = false
+
+[cmd_duration]
+min_time = 2000
+format = 'took [$duration]($style) '
+style = 'yellow bold'
+show_milliseconds = false
+disabled = false
+show_notifications = false
+min_time_to_notify = 45000
+
+[fill]
+style = 'dimmed #565a6e'
+symbol = '─'
+disabled = false
+
+[time]
+format = '[$time]($style)'
+time_format = '%F %T'
+style = 'bold dimmed fg:black bg:white'
+use_12hr = false
+disabled = false
+utc_time_offset = 'local'
+time_range = '-'
+
+[username]
+format = '[$user]($style)'
+style_root = 'bold fg:red bg:#565f89'
+style_user = 'bold fg:yellow bg:#565f89'
+#show_always = false
+disabled = false
+
+[hostname]
+format = '[@$hostname]($style)'
+style = 'bold fg:yellow bg:#565f89'
+
+[directory]
+read_only = '🔒'
+read_only_style = 'red'
+style = 'bold dimmed fg:#7aa2f7'
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+
+[[battery.display]]
+threshold = 20
+style = "bold red"
+
