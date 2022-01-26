@@ -1,64 +1,83 @@
 Dotfiles that I share amongst my workstations (idea and some content from Josh Beard's GitHub: https://github.com/joshbeard/dotfiles)
 
+- [References](#references)
+- [ZSH with Starship](#zsh-with-starship)
+
 ## References
-  - ZSH Plugin Manager: https://github.com/zdharma/zinit
-  - ZSH Theme: https://github.com/romkatv/powerlevel10k
-  - Nerd Fonts: https://github.com/ryanoasis/nerd-fonts
-    - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
-  - Tmux Config: https://github.com/gpakosz/.tmux
-  - Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
-  - Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
-  - Neovim / Nvim: https://github.com/neovim/neovim
-    - Tokyo Night theme: https://github.com/folke/tokyonight.nvim
-  - vim-plug: https://github.com/junegunn/vim-plug
 
-## Quick Install
-TODO: Turn this into an Ansible playbook
+- [Starship Cross-Shell Prompt](https://starship.rs/)
+- [ZSH Antigen Plugin Manager](https://github.com/zsh-users/antigen)
+- [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
+  - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
+- Tmux Config: https://github.com/gpakosz/.tmux
+- Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
+- Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
+- Neovim / Nvim: https://github.com/neovim/neovim
+  - Tokyo Night theme: https://github.com/folke/tokyonight.nvim
+- vim-plug: https://github.com/junegunn/vim-plug
 
-Install the latest release of Neovim from: https://github.com/neovim/neovim/releases/tag/stable
+## ZSH with Starship
+
+[Starship](https://starship.rs/) is a cross-shell prompt built with Rust.
+
+- Install Starship and Antigen (ZSH plugin manager) and Antigen (ZSH plugin manager)
 
 ```shell
-# Install zsh and other helper apps not already installed
-sudo yum -y install zsh wget curl git
+sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir ~/.local/bin
+curl -L git.io/antigen > ~/antigen.zsh
+```
 
-# Install Zinit https://github.com/zdharma/zplugin
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
-zsh
-zinit self-update
+- Install Nerd Fonts
+  - Mac Nerd Font install using Homebrew
 
-# Clone dotfiles and copy some of the config files
-if [ ! -d ~/git/flakrat ]; then mkdir -p ~/git/flakrat; fi
+  ```shell
+  cd ~
+  if [[ -d ~/homebrew ]]; then
+    cd ~/homebrew
+    git pull
+    cd -
+  else
+    git clone https://github.com/Homebrew/brew homebrew
+  fi
 
-# Install gpakosz/.tmux
-cd ~
-git clone https://github.com/gpakosz/.tmux.git
-ln -s -f .tmux/.tmux.conf
+  eval "$(~/homebrew/bin/brew shellenv)"
+  brew update --force --quiet
+  chmod -R go-w "$(brew --prefix)/share/zsh"
+
+  brew tap homebrew/cask-fonts
+  brew install --cask font-hack-nerd-font
+  brew install --cask font-fira-code-nerd-font
+  brew install --cask font-meslo-lg-nerd-font
+
+  printf '\ue0c0\n'
+  ```
+
+  - Linux manual Nerd Font Install
+
+  ```shell
+  fontdir="~/.local/share/fonts/NerdFonts"
+  [[ ! -d "$fontdir" ]] && mkdir -p $fontdir
+
+  curl -fLo "${fontdir}/Hack Regular Nerd Font Complete.ttf" \
+    https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf
+
+  fc-cache -f "$fontdir"
+  printf '\ue0c0\n'
+  ```
+
+- Add ZSH configuration files from this repo
+
+```shell
+[[ ! -d ~/git/flakrat ]] && mkdir -p ~/git/flakrat
 
 cd ~/git/flakrat
 git clone https://github.com/flakrat/dotfiles.git
 
-# Copy some of the config files
-cd ~/git/flakrat/dotfiles/home
-cp -a .zsh* .vimrc .tmux.conf.local  ~/
+cd ~/git/flakrat/dotfiles/home/zsh
+cp .zshrc .zshrc.local  ~/
 
-# Nerd Hack Font - https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Hack
-if [ ! -d ~/.local/share/fonts ]; then mkdir -p ~/.local/share/fonts; fi
-if [ ! -d ~/.config/fontconfig/conf.d ]; then mkdir -p ~/.config/fontconfig/conf.d; fi
-
-if [ ! -d ~/tmp ]; then mkdir ~/tmp; fi
-cd ~/tmp
-hack=Hack-v3.003-ttf.tar.gz
-wget https://github.com/source-foundry/Hack/releases/download/v3.003/$hack
-if [ -d ~/tmp/ttf ]; then rm -rf ~/tmp/ttf; fi
-tar -zxf $hack
-cp -a ttf/Hack*.ttf ~/.local/share/fonts/
-cd ~/.config/fontconfig/conf.d/
-curl -fLo "10-nerd-font-symbols.conf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/10-nerd-font-symbols.conf
-fc-cache -f -v
-unset hack
-
-# Install vim-plug
-cd ~
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+[[ ! -d ~/.config ]] && mkdir -p ~/.config
+cp starship.toml ~/.config/
 ```
+
+- Exit and restart the shell and your prompt should now be awesome
