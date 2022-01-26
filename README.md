@@ -6,6 +6,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 ## References
 
 - [Starship Cross-Shell Prompt](https://starship.rs/)
+  - [Starship Discord Server](https://discord.gg/8Jzqu3T)
 - [ZSH Antigen Plugin Manager](https://github.com/zsh-users/antigen)
 - [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
   - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
@@ -19,6 +20,8 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 ## ZSH with Starship
 
 [Starship](https://starship.rs/) is a cross-shell prompt built with Rust.
+
+![image](https://user-images.githubusercontent.com/1587409/151089867-9ec01914-5fd0-4585-b5b1-1982db0d2b1e.png)
 
 - Install Starship and Antigen (ZSH plugin manager) and Antigen (ZSH plugin manager)
 
