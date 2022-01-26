@@ -8,6 +8,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 - [Starship Cross-Shell Prompt](https://starship.rs/)
   - [Starship Discord Server](https://discord.gg/8Jzqu3T)
 - [ZSH Antigen Plugin Manager](https://github.com/zsh-users/antigen)
+- [Powerline Extra Symbols](https://github.com/ryanoasis/powerline-extra-symbols)
 - [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
   - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
 - Tmux Config: https://github.com/gpakosz/.tmux
