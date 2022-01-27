@@ -79,7 +79,7 @@ curl -L git.io/antigen > ~/antigen.zsh
 cd ~/git/flakrat
 git clone https://github.com/flakrat/dotfiles.git
 
-cd ~/git/flakrat/dotfiles/home/zsh
+cd ~/git/flakrat/dotfiles/zsh
 cp .zshrc .zshrc.local  ~/
 
 [[ ! -d ~/.config ]] && mkdir -p ~/.config
