@@ -27,6 +27,8 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 - Install Starship and Antigen (ZSH plugin manager) and Antigen (ZSH plugin manager)
 
 ```shell
+[[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bim
+
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir ~/.local/bin
 curl -L git.io/antigen > ~/antigen.zsh
 ```
