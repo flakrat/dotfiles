@@ -27,7 +27,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 - Install Starship and Antigen (ZSH plugin manager) and Antigen (ZSH plugin manager)
 
 ```shell
-[[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bim
+[[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir ~/.local/bin
 curl -L git.io/antigen > ~/antigen.zsh
@@ -61,7 +61,7 @@ curl -L git.io/antigen > ~/antigen.zsh
   - Linux manual Nerd Font Install
 
   ```shell
-  fontdir="~/.local/share/fonts/NerdFonts"
+  fontdir="$HOME/.local/share/fonts/NerdFonts"
   [[ ! -d "$fontdir" ]] && mkdir -p $fontdir
 
   curl -fLo "${fontdir}/Hack Regular Nerd Font Complete.ttf" \
