@@ -87,3 +87,13 @@ cp starship.toml ~/.config/
 ```
 
 - Exit and restart the shell and your prompt should now be awesome
+
+## Tmux
+
+Install gpakosz/.tmux
+
+```shell
+cd ~
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+```
