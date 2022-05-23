@@ -56,7 +56,10 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   }
   sinfo_drained_reason () {
     for node in $(sinfo --states=drain --noheader -N | awk '{print $1}' | sort | uniq); do
-      scontrol show node $node | egrep "NodeName|Reason" | sed -E -e 's/Arch.*$|Cores.*$//g'
+      reason=`scontrol show node $node | egrep "NodeName|Reason" | sed -E -e 's/Arch.*$|Cores.*$//g' | tr '\n' '-'`
+      reason="${reason//Reason=/}"
+      reason="${reason//NodeName=/}"
+      echo $reason
     done
   }
   sinfo_drained_reason_mem () {
@@ -119,6 +122,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master" ]]; then
   #module load slurm
 
   # Cheaha-master aliases
+  alias bright_release='cmsh -n -c "main; versioninfo"'
   alias downhosts='cmsh -n -c "device status | grep DOWN"'
   alias ansible_root='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts'
   alias reboot_computenodes='sudo /usr/bin/ansible -i ~mhanby/.ansible/hosts computenodes -a "/sbin/shutdown
@@ -194,7 +198,9 @@ alias viro='vim -Mn'
 # Open vim without reading .vimrc, much faster (not so be confused with
 # vim.tiny binary, which still sources .vimrc
 alias vimtiny='vim -u NONE'
-
+# shortcuts to lower and upper case strings
+alias tolower="tr '[:upper:]' '[:lower:]'"
+alias toupper="tr '[:lower:]' '[:upper:]'"
 # https://www.cyberciti.biz/tips/bash-aliases-mac-centos-linux-unix.html
 alias mountpretty='mount |column -t'
 alias datepretty='date +"%Y%m%d_%H%M%S"'
