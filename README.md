@@ -24,7 +24,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 
 ![image](https://user-images.githubusercontent.com/1587409/151089867-9ec01914-5fd0-4585-b5b1-1982db0d2b1e.png)
 
-- Install Starship and Antigen (ZSH plugin manager) and Antigen (ZSH plugin manager)
+- Install Starship and Antigen (ZSH plugin manager)
 
 ```shell
 [[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
