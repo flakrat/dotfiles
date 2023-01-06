@@ -24,7 +24,7 @@ compinit
 HISTSIZE=1000000
 SAVEHIST=1000000
 #setopt extendedhistory incappendhistorytime appendhistory extendedglob nomatch
-setopt extendedhistory incappendhistorytime appendhistory nomatch
+setopt  extendedhistory incappendhistorytime appendhistory histignorespace nomatch interactivecomments
 
 bindkey -v
 
