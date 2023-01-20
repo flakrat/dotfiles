@@ -22,7 +22,7 @@ Plug 'pearofducks/ansible-vim', { 'do': './UltiSnips/generate.sh' }
 
 " Themes
 Plug 'lifepillar/vim-solarized8'
-Plug 'folke/tokyonight.nvim'
+"""Plug 'folke/tokyonight.nvim'
 
 " Always load devicons last
 Plug 'ryanoasis/vim-devicons'
@@ -35,8 +35,11 @@ call plug#end()
 syntax enable
 "set background=dark
 "colorscheme solarized8
-let g:tokyonight_style = "night"
-colorscheme tokyonight
+"""let g:tokyonight_style = "night"
+"""colorscheme tokyonight
 
 set encoding=UTF-8
 
+set noexpandtab
+set tabstop=2
+set shiftwidth=2
