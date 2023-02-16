@@ -439,7 +439,7 @@ set -g default-terminal "screen-256color"
 set -ga terminal-overrides ",xterm-256color:Tc"
 
 # Disabling the default setting in https://github.com/gpakosz/.tmux.git .tmux.conf
-set -g renumber-windows of    # don't renumber windows when a window is closed
+set -g renumber-windows off    # don't renumber windows when a window is closed
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
