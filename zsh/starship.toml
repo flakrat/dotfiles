@@ -3,7 +3,7 @@
 add_newline = true
 
 #format = """$username$directory$git_branch$git_commit$git_state$git_status$fill$java$php$dart$time$cmd_duration$character$line_break> """
-format = """$username$hostname$directory$git_branch$git_commit$git_state$git_status$fill$ruby$python$cmd_duration$time$character$line_break> """
+format = """$username$hostname$directory$git_branch$git_commit$git_state$git_status$fill$ruby$python$cmd_duration$time$character$line_break\\$ """
 
 [line_break]
 disabled = false
@@ -50,7 +50,7 @@ format = "[ \\($hash\\) ](bg:#24283b fg:white)"
 ahead = "⇡$count "
 behind = "⇣$count "
 untracked = "?$count "
-stashed = "$$count "
+stashed = "\\$$count "
 modified = "!$count "
 staged = "+$count "
 renamed = "»$count "
