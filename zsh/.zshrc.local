@@ -1,7 +1,11 @@
 export EDITOR=`which vim`
 
-function mgrep () {
-  grep $1 ~/.zsh_history_cheaha_master.mhanby
+function m-histgrep () {
+  grep $1 ~/.zsh_history_cheaha_master.mhanby | cut -d ";" -f2-
+}
+
+function histgrep () {
+  grep $1 $HISTFILE | cut -d ";" -f2-
 }
 
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
@@ -28,12 +32,15 @@ ihighlight () {
 # Host agnostic alias and functions
 alias histall="history -i 1"
 alias igrep="grep -i"
+alias to-lc="tr '[:upper:]' '[:lower:]'"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
 alias vmlist="virsh --connect qemu:///system list"
 alias virsh-sys="virsh --connect qemu:///system"
-alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "'
+#alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "'
+alias proclist='ps -eo user,pid,ppid,pcpu,pmem,stat,start_time,etime,cmd --sort=-pcpu,-pmem | egrep -v "  0.[0-9]  0.[0-9] "| egrep -v "auditbeat|metricbeat|vscode|gnome-shell|firefox|slideshow" | egrep -v " [0-9]  0.[0-9]" | egrep -v "rsync|polkitd|sftp-server|notty|mhanby|screensaver|mmfsd|atom"'
 alias memlist='ps -eo user,pid,ppid,cmd:75,%mem,%cpu --sort=-%mem | head -n 15'
 alias topmem="ps aux --sort=-%mem | awk 'NR<=10{print \$0}'"
+
 function vmlist-remote() { virsh --connect qemu+ssh://$1/system list; }
 function virsh-sys-remote() { virsh --connect qemu+ssh://$1/system; }
 # Sort processes by top virtmem usage
@@ -54,6 +61,7 @@ alias gitdiff='git --no-pager diff'
 # VI Aliases
 # Open file in readonly and no swap
 alias viro='vim -Mn'
+alias vimro='vim -Mn'
 # Open vim without reading .vimrc, much faster (not so be confused with
 # vim.tiny binary, which still sources .vimrc
 alias vimtiny='vim -u NONE'
