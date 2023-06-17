@@ -47,7 +47,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
-  alias sinfo_clean='sinfo --format "%.10P %.10l %.6D %.6m %N"'
+  alias sinfo_clean='sinfo --summarize --all'
   alias sinfo_downhosts="sinfo --states=down --noheader -N | awk '{print \$1}' | sort | uniq"
   slurm_disable_user () {
     sudo /cm/shared/apps/slurm/current/bin/sacctmgr modify user $1 set maxjobs=0
