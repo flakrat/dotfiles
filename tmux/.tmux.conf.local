@@ -456,7 +456,6 @@ set -s escape-time 0
 #   less /var/log/messages
 #   WARNING: terminal is not fully functional
 set -g default-terminal "screen-256color"
-set -ga terminal-overrides ",xterm-256color:Tc"
 
 # Disabling the default setting in https://github.com/gpakosz/.tmux.git .tmux.conf
 set -g renumber-windows off    # don't renumber windows when a window is closed
