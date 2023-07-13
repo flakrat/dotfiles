@@ -1,5 +1,16 @@
 export EDITOR=`which vim`
 
+# Load bash completion functions
+# https://stackoverflow.com/questions/69675174/bash-completion-does-not-work-in-zsh-oh-my-zsh-because-comp-words-is-not-an-arra
+autoload -Uz +X compinit && compinit
+autoload -Uz +X bashcompinit && bashcompinit
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' matcher-list 'r:|[._-]=** r:|=**' 'l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+
+# Load Slurm bash completions
+# https://github.com/SchedMD/slurm/blob/master/contribs/slurm_completion_help/slurm_completion.sh
+#source ~/.bash_completion.d/slurm_completion.sh
+
 function m-histgrep () {
   grep $1 ~/.zsh_history_cheaha_master.mhanby | cut -d ";" -f2-
 }
@@ -31,6 +42,7 @@ ihighlight () {
 
 # Host agnostic alias and functions
 alias histall="history -i 1"
+alias ggg='grep -v grep' # Tired of grep'ing out grep
 alias igrep="grep -i"
 alias to-lc="tr '[:upper:]' '[:lower:]'"
 alias rpmarch="rpm -qa --queryformat='%{N}-%{V}-%{R}-.%{arch}\n'"
@@ -88,7 +100,6 @@ fi
 
 ## less/man search highlighting
 ## https://stackoverflow.com/questions/10535432/tmux-man-page-search-highlighting
-## Colored man pages: http://linuxtidbits.wordpress.com/2009/03/23/less-colors-for-man-pages/
 export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
 export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
 export LESS_TERMCAP_me=$'\E[0m'           # end mode
