@@ -5,17 +5,19 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 
 ## References
 
-- [Starship Cross-Shell Prompt](https://starship.rs/)
-  - [Starship Discord Server](https://discord.gg/8Jzqu3T)
-- [ZSH Antigen Plugin Manager](https://github.com/zsh-users/antigen)
-- [Powerline Extra Symbols](https://github.com/ryanoasis/powerline-extra-symbols)
-- [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
-  - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
-- Tmux Config: https://github.com/gpakosz/.tmux
-- Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
-- Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
-- Neovim / Nvim: https://github.com/neovim/neovim
-- [NvChad](https://nvchad.com/) - Blazing fast plugin manager for NeoVim
+- Zsh
+  - [Starship Cross-Shell Prompt](https://starship.rs/)
+    - [Starship Discord Server](https://discord.gg/8Jzqu3T)
+  - [Antidote](https://getantidote.github.io/options) - "Antidote is a Zsh plugin manager made from the ground up thinking about performance."
+  - [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
+    - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
+- Tmux
+  - Tmux Config: https://github.com/gpakosz/.tmux
+  - Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
+  - Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
+- NeoVim
+  - Neovim / Nvim: https://github.com/neovim/neovim
+  - [NvChad](https://nvchad.com/) - Blazing fast plugin manager for NeoVim
 
 ## ZSH with Starship
 
@@ -23,16 +25,16 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 
 ![image](https://user-images.githubusercontent.com/1587409/151089867-9ec01914-5fd0-4585-b5b1-1982db0d2b1e.png)
 
-- Install Starship and Antigen (ZSH plugin manager)
+- Install Starship and Antidote (ZSH plugin manager)
 
 ```shell
 [[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir ~/.local/bin
-curl -L git.io/antigen > ~/antigen.zsh
+git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
 ```
 
-- Install Nerd Fonts
+- Install Nerd Fonts (only needed on the local system
   - Mac Nerd Font install using Homebrew
 
   ```shell
