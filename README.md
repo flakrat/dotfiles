@@ -15,8 +15,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 - Tmux Resurrect: https://github.com/tmux-plugins/tmux-resurrect
 - Tmux Continuum: https://github.com/tmux-plugins/tmux-continuum
 - Neovim / Nvim: https://github.com/neovim/neovim
-  - Tokyo Night theme: https://github.com/folke/tokyonight.nvim
-- vim-plug: https://github.com/junegunn/vim-plug
+- [NvChad](https://nvchad.com/) - Blazing fast plugin manager for NeoVim
 
 ## ZSH with Starship
 
@@ -98,4 +97,13 @@ git clone https://github.com/gpakosz/.tmux.git
 ln -s -f .tmux/.tmux.conf
 cp ~/git/flakrat/dotfiles/tmux/.tmux.conf.local ~/
 mkdir ~/.tmux_resurrect
+```
+
+## NeoVim / NvChad
+
+Install the [NvChad](https://nvchad.com/) plugin manager for NeoVim
+
+```shell
+if [[ -d ~/.config/nvim ]]; then rm -rf ~/.config/nvim; fi
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
 ```
