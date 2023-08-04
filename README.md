@@ -8,7 +8,7 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 - Zsh
   - [Starship Cross-Shell Prompt](https://starship.rs/)
     - [Starship Discord Server](https://discord.gg/8Jzqu3T)
-  - [Antidote](https://getantidote.github.io/options) - "Antidote is a Zsh plugin manager made from the ground up thinking about performance."
+  - [ZSH Antigen Plugin Manager](https://github.com/zsh-users/antigen) - Zsh plugin manager
   - [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts)
     - [Nerd Font Cheat Sheet](https://www.nerdfonts.com/cheat-sheet)
 - Tmux
@@ -25,13 +25,13 @@ Dotfiles that I share amongst my workstations (idea and some content from Josh B
 
 ![image](https://user-images.githubusercontent.com/1587409/151089867-9ec01914-5fd0-4585-b5b1-1982db0d2b1e.png)
 
-- Install Starship and Antidote (ZSH plugin manager)
+- Install Starship and Antigen (ZSH plugin manager)
 
 ```shell
 [[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
 
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir ~/.local/bin
-git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+curl -L git.io/antigen > ~/antigen.zsh
 ```
 
 - Install Nerd Fonts (only needed on the local system
