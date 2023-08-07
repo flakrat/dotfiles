@@ -109,6 +109,7 @@ Install the latest release of NeoVim AppImage
 file=~/.local/bin/nvim.appimage
 test -f $file && rm $file
 curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o $file
+ln -s $file ~/.local/bin/nvim
 chmod 755 $file
 ```
 
