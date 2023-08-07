@@ -103,9 +103,25 @@ mkdir ~/.tmux_resurrect
 
 ## NeoVim / NvChad
 
+Install the latest release of NeoVim AppImage
+
+```shell
+file=~/.local/bin/nvim.appimage
+test -f $file && rm $file
+curl -L https://github.com/neovim/neovim/releases/latest/download/nvim.appimage -o $file
+chmod 755 $file
+```
+
 Install the [NvChad](https://nvchad.com/) plugin manager for NeoVim
 
 ```shell
-if [[ -d ~/.config/nvim ]]; then rm -rf ~/.config/nvim; fi
+test -d ~/.config/nvim && rm -rf ~/.config/nvim
+test -d ~/.local/share/nvim && rm -rf ~/.local/share/nvim
 git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+```
+
+NvChad can be updated from within NeoVim using the command
+
+```shell
+NvChadUpdate
 ```
