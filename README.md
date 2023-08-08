@@ -126,3 +126,15 @@ NvChad can be updated from within NeoVim using the command
 ```shell
 NvChadUpdate
 ```
+
+Optionally, disable the mouse click moving the cursor by editing `~/.config/nvim/lua/core/init.lua` and changing `opt.mouse = "a"` to `opt.mouse = ""`
+
+Additionally, on RHEL7 / CentOS 7, `nvim-treesitter` fails to build. It can be disabled by editing `~/.config/nvim/lua/custom/plugins.lua`
+
+```lua
+{
+  "nvim-treesitter/nvim-treesitter",
+  opts = overrides.treesitter,
+  enabled = false
+},
+```
