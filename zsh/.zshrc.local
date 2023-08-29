@@ -78,8 +78,8 @@ alias vimro='vim -Mn'
 # vim.tiny binary, which still sources .vimrc
 alias vimtiny='vim -u NONE'
 
-## grep without comments
-alias nocomment='grep -Ev '\''^(#|$|;)'\'''
+## Exclude blank lines and comments from output
+alias nocomment="sed -Ee '/^[[:space:]]*(#|$|;)/d'"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   alias md5='md5 -r'

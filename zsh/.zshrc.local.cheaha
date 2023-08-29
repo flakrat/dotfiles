@@ -46,6 +46,7 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   alias scontrol_admin="sudo /cm/shared/apps/slurm/current/bin/scontrol"
   alias scancel_admin="sudo /cm/shared/apps/slurm/current/bin/scancel"
   alias sacctmgr_admin="sudo /cm/shared/apps/slurm/current/bin/sacctmgr"
+  alias sinfo_summary="sinfo -o '%.20P %.5a %.10l %.19F %.10z %.20C'"
   alias sinfo_gres='sinfo -o "%15N %10c %10m  %25f %10G"'
   alias sinfo_clean='sinfo --summarize --all'
   alias sinfo_downhosts="sinfo --states=down --noheader -N | awk '{print \$1}' | sort | uniq"
@@ -57,10 +58,8 @@ if [[ "$(hostname -s)" =~ "cheaha-master|login|c[0-9][0-9][0-9][0-9]" ]]; then #
   }
   sinfo_drained_reason () {
     for node in $(sinfo --states=drain --noheader -N | awk '{print $1}' | sort | uniq); do
-      reason=`scontrol show node $node | egrep "NodeName|Reason" | sed -E -e 's/Arch.*$|Cores.*$//g' | tr '\n' '-'`
-      reason="${reason//Reason=/}"
-      reason="${reason//NodeName=/}"
-      echo $reason
+      reason="$(sinfo -o '%t %E' -hn $node)"
+      echo "$node :: $reason"
     done
   }
   sinfo_drained_reason_mem () {
@@ -232,7 +231,6 @@ alias cpuinfo='lscpu'
 ## get GPU ram on desktop / laptop##
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## grep without comments
-alias nocomment='grep -Ev '\''^(#|$|;)'\'''
 alias lt='ls -alrt'
 alias tf='tail -f '
 alias psg='ps auxf | grep '
