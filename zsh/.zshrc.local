@@ -19,6 +19,11 @@ function histgrep () {
   grep $1 $HISTFILE | cut -d ";" -f2-
 }
 
+function wbgrep () {
+  cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/whiteboard
+  find . -name \*.md -exec grep -i $1 {} \;
+}
+
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
