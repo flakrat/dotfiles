@@ -22,6 +22,7 @@ function histgrep () {
 function wbgrep () {
   cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/whiteboard
   find . -name \*.md -exec grep -i $1 {} \;
+  cd -
 }
 
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
