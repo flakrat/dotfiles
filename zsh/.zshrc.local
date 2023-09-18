@@ -21,7 +21,21 @@ function histgrep () {
 
 function wbgrep () {
   cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/whiteboard
-  find . -name \*.md -exec grep -i $1 {} \;
+#  find . -name \*.md -exec grep -i $1 {} \;
+  declare -a md_files=()
+
+  # Use find with -print0 to print null-terminated filenames
+  while IFS= read -r -d $'\0' file; do
+    md_files+=("$file")
+  done < <(find . -type f -name "*.md" -not -path "*/.history/*" -print0)
+
+  # Print the array elements (file names)
+  for file in "${md_files[@]}"; do
+    if [[ $(grep -i $1 "$file") ]]; then
+      echo ":::---\t$file\t---:::"
+      grep -i $1 $file
+    fi
+  done
   cd -
 }
 
