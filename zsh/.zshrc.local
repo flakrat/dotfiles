@@ -31,9 +31,9 @@ function wbgrep () {
 
   # Print the array elements (file names)
   for file in "${md_files[@]}"; do
-    if [[ $(grep -i $1 "$file") ]]; then
+    if [[ $(grep -iE "$1" "$file") ]]; then
       echo ":::---\t$file\t---:::"
-      grep -i $1 $file
+      grep -iE "$1" $file
     fi
   done
   cd -
