@@ -141,7 +141,7 @@ cd ~
 git clone https://github.com/gpakosz/.tmux.git
 ln -s -f .tmux/.tmux.conf
 cp ~/git/flakrat/dotfiles/tmux/.tmux.conf.local ~/
-mkdir ~/.tmux_resurrect
+if [[ ! -d ~/.tmux_resurrect ]]; then mkdir ~/.tmux_resurrect; fi
 ```
 
 ## NeoVim / NvChad
