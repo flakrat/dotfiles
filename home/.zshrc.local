@@ -2,8 +2,8 @@ export PATH=$HOME/.local/bin:${PATH}
 export LD_LIBRARY_PATH=$HOME/.local/lib:${LD_LIBRARY_PATH}
 export EDITOR=/usr/bin/vim
 
-function mgrep () {
-  grep $1 ~/.zsh_history_cheaha_master.mhanby
+function histgrep () {
+  grep "$@" "$HISTFILE" | cut -d ";" -f2-
 }
 
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
