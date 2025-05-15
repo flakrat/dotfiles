@@ -6,6 +6,33 @@ function histgrep () {
   grep "$@" "$HISTFILE" | cut -d ";" -f2-
 }
 
+## wbgrep(): grep through Markdown files in Obsidian vault for string
+##  Prints two lines per match:
+##  - Filename and helpful copy and paste 'code -n --goto <file-path>/<file-name>:<line-num>:<column-num>'
+##    that can be used to open the file to the appropriate line number in VSCode
+##  - The matching line
+function wbgrep () {
+  cd ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/whiteboard
+  declare -a md_files=()
+
+  # Use find with -print0 to print null-terminated filenames
+  while IFS= read -r -d $'\0' file; do
+    md_files+=("$file")
+  done < <(find . -type f -name "*.md" -not -path "*/.history/*" -print0)
+
+  # Print the array elements (file names)
+  for file in "${md_files[@]}"; do
+    if [[ $(grep -iE "$1" "$file") ]]; then
+      input="$(grep -n -iE "$1" $file)"
+      linenum=${input%%:*}
+      strmatch=${input#*:}
+      echo ":::---\t$file\t---::: code -n --goto \"$PWD/$file\":${linenum}:1"
+      echo $strmatch
+    fi
+  done
+  cd -
+}
+
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
