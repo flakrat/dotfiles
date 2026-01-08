@@ -49,7 +49,7 @@ function flk_bmc_lookup () {
     node="$1"
   fi
 
-  pushd ~/git/rc-dns-master >/dev/null
+  pushd $ZONEFILEDIR >/dev/null
   grep -h $node zones/db.*.zone | grep bmc | awk '{
       split($1, a, ".");
       node = $4;
