@@ -39,6 +39,27 @@ function wbgrep () {
   cd -
 }
 
+## Flakrat - flk_bmc_lookup() lookup BMC address in zone file, print clickable URL
+##   Also, I'm beginning to add prefix flk_ to my functions to keep my own namespace
+function flk_bmc_lookup () {
+  if [ -z "$1" ]; then
+    echo "Error: Missing argument \$1"
+    exit 1
+  else
+    node="$1"
+  fi
+
+  pushd $ZONEFILEDIR >/dev/null
+  grep -h $node zones/db.*.zone | grep bmc | awk '{
+      split($1, a, ".");
+      node = $4;
+      sub(/\.my\.dom\.$/, "", node);
+      printf "%s : https://172.16.%s.%s\n", node, a[2], a[1]
+  }'
+
+  popd >/dev/null
+}
+
 # http://stackoverflow.com/questions/103944/real-time-history-export-amongst-bash-terminal-windows/3055135#3055135
 srvr=`hostname -s`
 if [[ "$(hostname -s)" =~ "c[0-9][0-9][0-9][0-9]" ]]; then
